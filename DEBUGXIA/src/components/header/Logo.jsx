@@ -2,8 +2,8 @@ import React from 'react'
 
 const Logo = () => {
   return (
-    <div>
-        <img src="public/Logo.svg" alt="" />
+    <div className='px-5'>
+        <img src="public/Logo.svg" alt=""  className='h-20 w-35'/>
     </div>
   )
 }

@@ -30,8 +30,6 @@ const Examole = () => {
   
           <div className='flex flex-col gap-5 justify-between border-white rounded-md'>
   
-            <img src="https://th.bing.com/th/id/OIP.9Gfcg3ohdDODZ1fau5dKtAHaHa?w=186&h=186&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" alt="" className='w-50 h-50' />
-  
           <input type="text" placeholder='Enter Notes Heading' className='px-5 py-2 text-white font-semibold text-lg tracking-wide border-white border-2 rounded-md' value={title} onChange={(e) =>{setTitle(e.target.value)}}/>
   
           <textarea placeholder='Enter Details' name="" id=""className='px-5 py-2 font-semibold text-lg tracking-wide border-white rounded-md border-2 'value={details} onChange={(e) => {setDetails(e.target.value)}}></textarea>

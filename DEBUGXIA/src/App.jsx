@@ -1,10 +1,12 @@
 import React from 'react'
-import Logo from './components/header/Logo'
+import Examole from './components/Examole'
+import Navbar from './components/Navbar'
 
 const App = () => {
   return (
-    <div>
-      <Logo/>
+    <div className=''>
+      <Navbar/>
+      <Examole/>
     </div>
   )
 }
