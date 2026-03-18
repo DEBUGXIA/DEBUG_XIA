@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import Logo from './header/Logo'
+import Icon from './icon/icon'
 
 const Examole = () => {
     
@@ -24,34 +26,40 @@ const Examole = () => {
       }
   
     return (
-      <div className='p-10 bg-black h-screen text-white lg:flex justify-between gap-5'>
+      <div className='p-20 bg-[url(public/Glass.svg)] bg-cover bg-black h-screen text-white lg:flex justify-between gap-10 '>
   
-        <form className='flex flex-col lg:w-1/2 gap-5 justify-between border-white rounded-md' onSubmit={(e) =>{SubmitHandler(e)}}>
+        <form className=' flex-col lg:w-1/2 gap-5 justify-between border-white rounded-md py-2' onSubmit={(e) =>{SubmitHandler(e)}}>
+
+        <div className='font-bold text-2xl tracking-wide py-3'><Icon/>Your Coding Terminal</div>
   
           <div className='flex flex-col gap-5 justify-between border-white rounded-md'>
   
-          <input type="text" placeholder='Enter Notes Heading' className='px-5 py-2 text-white font-semibold text-lg tracking-wide border-white border-2 rounded-md' value={title} onChange={(e) =>{setTitle(e.target.value)}}/>
+          <input type="text" placeholder='Enter File Name' className='px-5 py-2 text-white font-semibold text-lg tracking-wide border-white border-1 rounded-md' value={title} onChange={(e) =>{setTitle(e.target.value)}}/>
   
-          <textarea placeholder='Enter Details' name="" id=""className='px-5 py-2 font-semibold text-lg tracking-wide border-white rounded-md border-2 'value={details} onChange={(e) => {setDetails(e.target.value)}}></textarea>
+          <textarea placeholder='Enter Your Code . . . ' name="" id=""className='px-5 py-2 font-semibold text-lg tracking-wide border-white rounded-md border-1 h-60'value={details} onChange={(e) => {setDetails(e.target.value)}}></textarea>
   
-          <button className='bg-white text-black px-5 py-2 font-semibold text-lg tracking-wide border-white rounded-md w-50 text-center'>Add Notes</button>
+          <div className='flex items-center justify-center'>
+            <button className='bg-blue-300 text-white px-4 py-2 font-semibold text-lg tracking-wide border-white border-2 rounded-2xl w-50 text-center cursor-pointer active::sc9'>Run Your Code</button>
+          </div>
           </div>
         </form>
-        <div className='flex flex-wap flex-col justify-between p-10 w-1/2 h-150 gap-5'>
+        <div className=' flex flex-wap flex-col justify-start p-2 w-1/2 h-150 gap-2'>
   
-        <div className='font-bold text-2xl tracking-wide'>Resent Notes</div>
+        <div className='font-bold text-2xl tracking-wide'><Icon/>Your Coding Teacher</div>
   
         {file.map(function(elem,idx){
             return <div key={idx} className='font-bold text-xl tracking-wide'>{elem.title}</div>
           })}
           
           {task.map(function(elem,idx){
-            return <div key={idx} className='rounded-2xl bg-black border-3 border-white w-full h-full p-5'>
+            return <div key={idx} className='rounded-2xl bg-black border-3 border-white w-full h-[50%] p-2'>
               <h3>{elem.details}</h3>
             </div>
           })}
   
         </div>
+      
+
       </div>
     )
   

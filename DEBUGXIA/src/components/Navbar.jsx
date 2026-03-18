@@ -5,7 +5,7 @@ import Sing_in_up from './header/Sing_in_up'
 
 const Navbar = () => {
   return (
-    <div className='bg-black text-blue-300 lg:flex items-center justify-between'>
+    <div className='bg-black text-blue-300 lg:flex items-center justify-between bg-[url(public/Glass.svg)] bg-cover'>
         <Logo/>
         <Nev />
         <Sing_in_up/>
