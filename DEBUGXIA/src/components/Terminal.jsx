@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import Logo from './header/Logo'
 import Icon from './icon/icon'
 
-const Examole = () => {
+const Terminal = () => {
     
   const [title, setTitle] = useState('')
   const [details, setDetails] = useState('')
@@ -26,7 +25,7 @@ const Examole = () => {
       }
   
     return (
-      <div className='p-20 bg-[url(public/Glass.svg)] bg-cover bg-gray-950 h-screen text-white lg:flex justify-between gap-10 '>
+      <div className='p-20  text-white lg:flex justify-between gap-10 '>
   
         <form className=' flex-col lg:w-1/2 gap-5 justify-between border-white rounded-md py-2' onSubmit={(e) =>{SubmitHandler(e)}}>
 
@@ -66,4 +65,4 @@ const Examole = () => {
   }
   
 
-export default Examole
+export default Terminal
