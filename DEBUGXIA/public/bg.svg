@@ -1,10 +1,26 @@
-<svg width="269" height="88" viewBox="0 0 269 88" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="269" height="88" fill="url(#paint0_linear_115_34)"/>
-<defs>
-<linearGradient id="paint0_linear_115_34" x1="0" y1="0" x2="269" y2="88" gradientUnits="userSpaceOnUse">
-<stop stop-color="#0161E7"/>
-<stop offset="0.538462" stop-color="#5EBCEA" stop-opacity="0.8"/>
-<stop offset="1" stop-color="#0161E7"/>
-</linearGradient>
-</defs>
+<svg width="100%" height="100%" viewBox="0 0 1440 900" xmlns="http://www.w3.org/2000/svg">
+
+  <defs>
+    <!-- 🌈 Background Gradient -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0b1a3a"></stop>   <!-- deep blue -->
+      <stop offset="50%" stop-color="#000000"></stop>  <!-- black -->
+      <stop offset="100%" stop-color="#0a3a40"></stop> <!-- cyan dark -->
+    </linearGradient>
+
+    <!-- 💨 Soft Blur -->
+    <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="120"></feGaussianBlur>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="url(#bgGradient)"></rect>
+
+  <!-- 🔵 Top-left Glow -->
+  <circle cx="150" cy="100" r="250" fill="#3b82f6" opacity="0.25" filter="url(#blur)"></circle>
+
+  <!-- 🔷 Bottom-right Glow -->
+  <circle cx="1250" cy="800" r="250" fill="#22d3ee" opacity="0.25" filter="url(#blur)"></circle>
+
 </svg>

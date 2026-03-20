@@ -1,5 +1,6 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
+import { motion } from "framer-motion";  
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import Features from './pages/Features'
@@ -10,7 +11,14 @@ import Get_Started from './pages/Get_Started'
 import Not_Found from './pages/Not_Found'
 const App = () => {
   return (
-    <div className='bg-gray-950 h-screen text-white'>
+
+    <div 
+    initial={{ opacity: 0 }}
+    whileInView={{ opacity: 1 }}
+    className=' bg-[url(/public/Bg.svg)] h-screen text-white relative overflow-hidden scroll-smooth min-h-screen overflow-y-auto bg-cover'>
+    
+      
+    
       <Navbar/>
       <Routes>
         <Route path='/' element={<Home/>}/>
@@ -22,7 +30,9 @@ const App = () => {
 
         <Route path='*' element={<Not_Found/>}/>
       </Routes>
-    </div>
+
+    
+  </div>
   )
 }
 

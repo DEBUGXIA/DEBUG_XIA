@@ -3,7 +3,7 @@ import Terminal from '../components/Terminal'
 
 const How_It_Works = () => {
   return (
-    <div className='bg-gray-950 '>
+    <div className=''>
         <Terminal/>
     </div>
   )
