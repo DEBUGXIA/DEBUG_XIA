@@ -45,21 +45,28 @@ const Terminal = () => {
 
       <div className=' flex flex-wap flex-col justify-start p-2 w-1/2 h-150 gap-2 '>
   
-        <div className='font-bold text-2xl tracking-wide mb-6'>Your Coding <span className='bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent text-3xl'>Teacher</span></div>
+        <div className='font-bold text-2xl tracking-wide mb-9'>Your Coding <span className='bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent text-3xl'>Teacher</span></div>
   
-        <div className=''>
+        <div className='rounded-2xl  border-3 border-white w-full h-[54%] p-2 bg-gray-900'>
+          <div className=''>
           {file.map(function(elem,idx){
             return <div key={idx} className='font-bold text-xl tracking-wide'>{elem.title}</div>
           })}
         </div>
           
-          <div className=''>
-            {task.map(function(elem,idx){
-            return <div key={idx} className='rounded-2xl  border-3 border-white w-full h-[50%] p-2 bg-gray-900'>
-              <h3>{elem.details}</h3>
-            </div>
-          })}
-          </div>
+          <div className='max-h-[400px] overflow-y-auto space-y-4 h-[90%] '>
+               {task.map(function(elem, idx) {
+                  return (
+                <div 
+                 key={idx} 
+                 className='p-4 rounded-xl break-words whitespace-pre-wrap'>
+                  <h3>{elem.details}</h3>
+                </div>
+                 )
+               })}
+           </div>
+
+        </div>
   
         </div>
         

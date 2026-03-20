@@ -1,12 +1,13 @@
 @import "tailwindcss";
 
+#right::-webkit-scrollbar{
+    display: none;
+}
+
 @theme {
   --font-display: "Funnel Display", sans-serif; 
 }
 
-#right::-webkit-scrollbar{
-    display: none;
-}
 
 @keyframes pulse{
   0%{
