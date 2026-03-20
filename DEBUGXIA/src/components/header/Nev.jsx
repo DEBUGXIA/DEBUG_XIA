@@ -4,6 +4,7 @@ import Home from '../../pages/Home'
 import Features from '../../pages/Features'
 import How_It_Works from '../../pages/How_It_Works'
 import Dashboard from '../../pages/Dashboard'
+import Not_Found from '../../pages/Not_Found'
 
 const Nev = () => {
   return (

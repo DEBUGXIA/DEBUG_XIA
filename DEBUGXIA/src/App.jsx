@@ -7,9 +7,10 @@ import How_It_Works from './pages/How_It_Works'
 import Dashboard from './pages/Dashboard'
 import SingIn from './pages/SingIn'
 import Get_Started from './pages/Get_Started'
+import Not_Found from './pages/Not_Found'
 const App = () => {
   return (
-    <div className='bg-gray-950 h-screen '>
+    <div className='bg-gray-950 h-screen text-white'>
       <Navbar/>
       <Routes>
         <Route path='/' element={<Home/>}/>
@@ -18,6 +19,8 @@ const App = () => {
         <Route path='/Dashboard' element={<Dashboard/>}/>
         <Route path='/SingIn' element={<SingIn/>}/> 
         <Route path='/Get_Started' element={<Get_Started/>}/>
+
+        <Route path='*' element={<Not_Found/>}/>
       </Routes>
     </div>
   )

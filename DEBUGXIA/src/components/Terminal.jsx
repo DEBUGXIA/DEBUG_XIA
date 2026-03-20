@@ -38,7 +38,7 @@ const Terminal = () => {
           <textarea placeholder='Enter Your Code . . . ' name="" id=""className='px-5 py-2 font-semibold text-lg tracking-wide border-white rounded-md border-1 h-60'value={details} onChange={(e) => {setDetails(e.target.value)}}></textarea>
   
           <div className='flex items-center justify-center'>
-            <button className=' text-white px-4 py-2 font-semibold text-lg tracking-wide rounded-2xl w-50 text-center cursor-pointer active::sc9 bg-[url(public/btn.svg)] bg-cover '>Run Your Code</button>
+            <button className=' text-white px-4 py-2 font-semibold text-lg tracking-wide rounded-2xl w-50 text-center bg-[url(public/btn.svg)] bg-cover transition delay-150 duration-300 ease-in-out'>Run Your Code</button>
           </div>
           </div>
         </form>
