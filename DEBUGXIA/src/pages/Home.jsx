@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import Dashboard from './Dashboard'
 import Terminal from '../components/Terminal'
 import { motion } from "framer-motion";
+import Features from './Features';
+import How_It_Works from './How_It_Works';
 
 const Home = () => {
   return (
@@ -28,6 +30,14 @@ const Home = () => {
     
     <div className=' ml-10 mr-10 w-screen'>
       <Terminal/>
+    </div>
+
+    <div>
+      <Features/>
+    </div>
+
+    <div>
+      <How_It_Works/>
     </div>
 
     </div>
