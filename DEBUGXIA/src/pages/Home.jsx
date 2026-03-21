@@ -19,9 +19,9 @@ const Home = () => {
       </div>
 
       <div className=' flex flex-row items-center justify-between gap-5'>
-        <button className='bg-gradient-to-r from-blue-500 to-cyan-400 text-xl font-semibold px-7 py-2 rounded-2xl'>Connect With VS Code</button>
-        <button className='text-xl font-semibold px-7 py-2 rounded-2xl border-2 border-gray-800'>
-          <Link to='/Dashboard'>Open Dashboard</Link>
+        <button className='bg-gradient-to-r from-blue-500 to-cyan-400 text-xl font-semibold px-7 py-3 rounded-2xl'>Connect With VS Code</button>
+        <button className='text-xl font-semibold px-7 py-3 rounded-2xl border-2 border-gray-800'>
+          <Link to='/Dashboard'>Download Extension</Link>
         </button>
 
       </div>
@@ -29,7 +29,7 @@ const Home = () => {
     </div>
     
     <div className=' ml-10 mr-10 w-screen'>
-      <Terminal/>
+      
     </div>
 
     <div>
@@ -39,6 +39,12 @@ const Home = () => {
     <div>
       <How_It_Works/>
     </div>
+
+    <div>
+      <Dashboard/>
+    </div>
+
+    
 
     </div>
   )

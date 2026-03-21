@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard'
 import SingIn from './pages/SingIn'
 import Get_Started from './pages/Get_Started'
 import Not_Found from './pages/Not_Found'
+import Footer from './components/Footer';
 const App = () => {
   return (
 
@@ -30,6 +31,7 @@ const App = () => {
 
         <Route path='*' element={<Not_Found/>}/>
       </Routes>
+      <Footer/>
 
 
     

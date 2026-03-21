@@ -16,7 +16,7 @@ const Features = () => {
           <h1 className='font-bold text-5xl tracking-normal'>Everything you need to <span className='bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent'>code smarter</span></h1>
         </div>
         <div>
-          <p className='font-medium text-base text-gray-500 tracking-wide'>A complete toolkit that transforms how you debug, learn, and improve as a<br></br><span className='px-65'>developer.</span></p>
+          <p className='font-medium text-lg text-gray-500 tracking-wide'>A complete toolkit that transforms how you debug, learn, and improve as a<br></br><span className='px-65'>developer.</span></p>
         </div>
       </div>
 
