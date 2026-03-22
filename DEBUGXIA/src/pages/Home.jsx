@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import Dashboard from './Dashboard'
 import Terminal from '../components/Terminal'
 import { motion } from "framer-motion";
+
 import Features from './Features';
 import How_It_Works from './How_It_Works';
 
@@ -21,15 +22,33 @@ const Home = () => {
           >
             Your AI <span className='bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent'>Coding Teacher</span>
           </motion.span></h1>
-        <p className='font-medium text-xl text-gray-500 tracking-wide'><span className='px-7'>Understand errors. Improve code. Become a better developer.</span><br></br>
-        Stop Googling stack traces — get instant, plain-English explanations.</p>
+        <p className='font-medium text-xl text-gray-500 tracking-wide'><motion.span
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="inline-block tracking-wide"
+          >
+            <span className='px-7'>Understand errors. Improve code. Become a better developer.</span><br></br>
+        Stop Googling stack traces — get instant, plain-English explanations.
+          </motion.span></p>
       </div>
 
       <div className=' flex flex-row items-center justify-between gap-5'>
-        <button className='bg-gradient-to-r from-blue-500 to-cyan-400 text-xl font-semibold px-7 py-3 rounded-2xl'>Connect With VS Code</button>
-        <button className='text-xl font-semibold px-7 py-3 rounded-2xl border-2 border-gray-800'>
-          <Link to='/Dashboard'>Download Extension</Link>
-        </button>
+        <button>
+          <motion.span
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="inline-block tracking-wide bg-gradient-to-r from-blue-500 to-cyan-400 text-xl font-semibold px-7 py-3 rounded-2xl"
+          > Connect With VS Code </motion.span></button>
+        <button>
+          <Link to='/Dashboard'>
+          <motion.span
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="inline-block tracking-wide text-xl font-semibold px-7 py-3 rounded-2xl border-2 border-gray-800"
+          > Download Extension </motion.span></Link></button>
 
       </div>
 
@@ -40,15 +59,39 @@ const Home = () => {
     </div>
 
     <div>
-      <Features/>
+      <motion.span
+        initial={{ opacity: 0, y: 60 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, ease: "easeOut" }}
+        viewport={{ once: true, amount: 0.3 }}
+        className="inline-block tracking-wide"
+      >
+        <Features/>
+      </motion.span>
     </div>
 
     <div>
-      <How_It_Works/>
+      <motion.span
+        initial={{ opacity: 0, y: 60 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, ease: "easeOut" }}
+        viewport={{ once: true, amount: 0.3 }}
+        className="inline-block tracking-wide"
+      >
+        <How_It_Works/>
+      </motion.span>
     </div>
 
     <div>
-      <Dashboard/>
+      <motion.span
+        initial={{ opacity: 0, y: 60 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, ease: "easeOut" }}
+        viewport={{ once: true, amount: 0.3 }}
+        className="inline-block tracking-wide"
+      >
+        <Dashboard/>
+      </motion.span>
     </div>
 
     
