@@ -46,7 +46,7 @@ const How_It_Works = () => {
               <h1 className=' text-lg tracking-wide font-medium'>Solution Appears</h1>
               <p className='font-medium text-base text-gray-500'>Extension detects errors in real-<br></br><span className=' ml-16'>finds solutions.</span></p>
             </div>
-          </div>
+          </div>          
     </div>
   )
 }
