@@ -31,7 +31,7 @@ const item = {
     transition={{ duration: 0.8 }}
     className="inline-block tracking-wide"
   >
-    Wellcome
+    Welcome
   </motion.span>
 </h1>
       </div>

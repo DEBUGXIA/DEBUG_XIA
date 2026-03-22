@@ -90,7 +90,7 @@ const item = {
     transition={{ duration: 0.8 }}
     className="inline-block tracking-wide gap-3"
   >
-    Wellcome <br></br><span className='px-25'>Back</span>
+    Welcome <br></br><span className='px-25'>Back</span>
   </motion.span>
 </h1>
       </div>
