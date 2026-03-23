@@ -1,0 +1,6 @@
+1st: open your VS Code Terminal 
+2nd: " python -m venv ALLenv " --run this comment
+3rd: " ALLenv\Scripts\activate " --activate your env 
+4th: " cd DEBUGXIA " --run this comment to select your folder 
+5th: " npm install " --run this comment to analyze the package.json file
+6th: " npm run dev " --run this comment to start your server

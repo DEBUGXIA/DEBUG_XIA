@@ -54,8 +54,16 @@ const Home = () => {
 
     </div>
     
-    <div className=' ml-10 mr-10 w-screen'>
-      
+    <div>
+       <motion.span
+        initial={{ opacity: 0, y: 60 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, ease: "easeOut" }}
+        viewport={{ once: true, amount: 0.3 }}
+        className="inline-block tracking-wide ml-10 mr-10 w-screen"
+      >
+        
+      </motion.span>
     </div>
 
     <div>
