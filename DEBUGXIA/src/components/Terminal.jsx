@@ -32,7 +32,21 @@ const Terminal = () => {
 
          <div className='flex flex-col gap-5 justify-between border-white rounded-md'>
   
-          <input type="text" placeholder='Enter File Name' className='px-5 py-2 text-white font-semibold text-lg tracking-wide border-white border-1 rounded-md' value={title} onChange={(e) =>{setTitle(e.target.value)}}/>
+          <div className=' flex flex-row items-center justify-between'>
+            <div className=' w-1/2'>
+              <input type="text" placeholder='Enter File Name' className='px-5 py-2 text-white font-semibold text-lg tracking-wide border-white border-1 rounded-md' value={title} onChange={(e) =>{setTitle(e.target.value)}}/>
+            </div>
+            <div className=' mr-5 w-1/2 flex items-center font-medium text-lg text-gray-500 tracking-wide'>
+            <label for="cars">Choose Your Language :</label>
+
+              <select name="cars" id="cars"  className='bg-gray-900 text-white w-20'>
+                <option value="volvo">Python</option>
+                <option value="saab">Java</option>
+                <option value="mercedes">C</option>
+                <option value="audi">C++</option>
+              </select>
+              </div>
+          </div>
   
           <textarea placeholder='Enter Your Code . . . ' name="" id=""className='bg-gray-900 px-5 py-2 font-semibold text-lg tracking-wide border-white rounded-md border-1 h-60'value={details} onChange={(e) => {setDetails(e.target.value)}}></textarea>
   
@@ -43,7 +57,7 @@ const Terminal = () => {
           </div>
       </form>
 
-      <div className=' flex flex-wap flex-col justify-start p-2 w-1/2 h-150 gap-2 '>
+      <div className=' flex flex-wap flex-col justify-start p-2 w-1/2 h-150 gap-2'>
   
         <div className='font-bold text-2xl tracking-wide mb-9'>Your Coding <span className='bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent text-3xl'>Teacher</span></div>
   
