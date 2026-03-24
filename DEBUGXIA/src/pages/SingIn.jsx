@@ -90,7 +90,7 @@ const SingIn = ({ setIsAuth }) => {
 
       </div>
 
-      {/* 💫 Floating blur */}
+      {/* Floating blur */}
       <motion.div
         animate={{ y: [0, -30, 0] }}
         transition={{ repeat: Infinity, duration: 5 }}
@@ -103,7 +103,7 @@ const SingIn = ({ setIsAuth }) => {
         className="absolute w-[400px] h-[400px] bg-cyan-400/20 blur-[120px] rounded-full bottom-[-100px] right-[-100px]"
       />
 
-      {/* 🔐 Login Card */}
+      {/* Login Card */}
       <motion.div
         initial={{ opacity: 0, scale: 0.7, x: -100 }}
         animate={{ opacity: 1, scale: 1, x: 0 }}
@@ -151,7 +151,7 @@ const SingIn = ({ setIsAuth }) => {
         </p>
       </motion.div>
 
-      {/* 💖 Side Text */}
+      {/* Side Text */}
       <div className='flex items-center justify-center font-semibold text-7xl font-serif'>
         <h1>
           <motion.span

@@ -4,7 +4,7 @@ import Home from './Home'
 
 const Not_Found = () => {
   return (
-    <div className='text-black bg-amber-300'>
+    <div className='text-black bg-amber-300 w-[100%] aspect-[16/9]'>
       <img src="https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif" alt="" className='w-800 h-160'/>
       <div className='flex flex-col items-center justify-between'>
         <div className='absolute top-25 font-serif font-medium text-6xl tracking-wider '>

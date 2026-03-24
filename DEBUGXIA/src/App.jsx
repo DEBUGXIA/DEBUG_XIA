@@ -18,6 +18,7 @@ import Privacy_Policy from './pages/Privacy_Policy'
 import Refund_Policy from './pages/Refund_Policy'
 import Home2 from './pages2.o/Home2'
 import Profile from './pages2.o/Profile'
+import Dashboard2 from './pages2.o/Dashboard2'
 
 // Protected Route (only for Home2 now)
 const ProtectedRoute = ({ isAuth, children }) => {
@@ -39,7 +40,7 @@ const App = () => {
   const location = useLocation();
 
   // Navbar2 only for Home2 (after login)
-  const afterLoginRoutes = ["/Home2", "/Profile"];
+  const afterLoginRoutes = ["/Home2", "/Profile","/Dashboard2"];
 
 const isAfterLoginRoute = afterLoginRoutes.some(route =>
   location.pathname.startsWith(route)
@@ -47,7 +48,7 @@ const isAfterLoginRoute = afterLoginRoutes.some(route =>
 
 
   return (
-    <div className='bg-[url(/public/Bg.svg)] h-screen text-white relative overflow-x-hidden scroll-smooth min-h-screen overflow-y-auto bg-cover'>
+    <div className='bg-[url(/public/Bg.svg)] h-screen text-white relative overflow-x-hidden scroll-smooth min-h-screen overflow-y-auto bg-cover  w-[100%] aspect-[16/9]'>
 
       {/* CONDITIONAL NAVBAR */}
       {isAuth && isAfterLoginRoute ? (
@@ -98,6 +99,14 @@ const isAfterLoginRoute = afterLoginRoutes.some(route =>
           element={
             <ProtectedRoute isAuth={isAuth}>
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/Dashboard2'
+          element={
+            <ProtectedRoute isAuth={isAuth}>
+              <Dashboard2 />
             </ProtectedRoute>
           }
         />

@@ -10,8 +10,8 @@ const Get_Started = ({setIsAuth}) => {
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    setIsAuth(true);        // 🔐 set login state
-    navigate("/Home2");     // 🚀 redirect after login
+    setIsAuth(true);        
+    navigate("/Home2");     
   };
 
 const container = {

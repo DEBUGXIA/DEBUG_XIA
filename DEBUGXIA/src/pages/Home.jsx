@@ -10,8 +10,8 @@ import How_It_Works from './How_It_Works';
 
 const Home = () => {
   return (
-    <div>
-    <div className='flex flex-col items-center justify-between gap-10 '>
+  
+    <div className='flex flex-col items-center justify-between gap-10 w-[100%] aspect-[16/9]'>
       
 
     <div className='flex flex-col items-center justify-between gap-10 mt-30'>
@@ -106,7 +106,7 @@ const Home = () => {
     
 
     </div>
-    </div>
+  
   )
 }
 
