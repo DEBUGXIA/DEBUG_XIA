@@ -1,11 +1,18 @@
 import React from 'react'
 import { motion } from "framer-motion";
 import SingIn from './SingIn'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Home2 from '../pages2.o/Home2';
 
 
-const Get_Started = () => {
+const Get_Started = ({setIsAuth}) => {
+
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    setIsAuth(true);        // 🔐 set login state
+    navigate("/Home2");     // 🚀 redirect after login
+  };
 
 const container = {
   hidden: {},
@@ -87,6 +94,7 @@ const item = {
         </motion.div>
 
         <motion.button
+        onClick={handleLogin}
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.6 }}

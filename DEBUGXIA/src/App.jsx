@@ -17,10 +17,15 @@ import Terms_and_con from './pages/Terms_and_con'
 import Privacy_Policy from './pages/Privacy_Policy'
 import Refund_Policy from './pages/Refund_Policy'
 import Home2 from './pages2.o/Home2'
+import Profile from './pages2.o/Profile'
 
 // Protected Route (only for Home2 now)
 const ProtectedRoute = ({ isAuth, children }) => {
   return isAuth ? children : <Navigate to="/SingIn" />;
+};
+
+const ProtectedRoute2 = ({ isAuth, children }) => {
+  return isAuth ? children : <Navigate to="/Get_started" />;
 };
 
 // Public Route
@@ -34,8 +39,12 @@ const App = () => {
   const location = useLocation();
 
   // Navbar2 only for Home2 (after login)
-  const isAfterLoginRoute =
-    location.pathname.startsWith("/Home2");
+  const afterLoginRoutes = ["/Home2", "/Profile"];
+
+const isAfterLoginRoute = afterLoginRoutes.some(route =>
+  location.pathname.startsWith(route)
+);
+
 
   return (
     <div className='bg-[url(/public/Bg.svg)] h-screen text-white relative overflow-x-hidden scroll-smooth min-h-screen overflow-y-auto bg-cover'>
@@ -53,7 +62,6 @@ const App = () => {
         <Route path='/' element={<Home />} />
         <Route path='/Features' element={<Features />} />
         <Route path='/How_It_Works' element={<How_It_Works />} />
-        <Route path='/Get_Started' element={<Get_Started />} />
         <Route path='/About' element={<About />} />
         <Route path='/Dashboard' element={<Dashboard />} />
 
@@ -67,12 +75,29 @@ const App = () => {
           }
         />
 
+        <Route
+          path='/Get_Started'
+          element={
+            <PublicRoute isAuth={isAuth}>
+              <Get_Started setIsAuth={setIsAuth} />
+            </PublicRoute>
+          }
+        />
+
         {/* AFTER LOGIN ONLY */}
         <Route
           path='/Home2'
           element={
             <ProtectedRoute isAuth={isAuth}>
               <Home2 />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/Profile'
+          element={
+            <ProtectedRoute isAuth={isAuth}>
+              <Profile />
             </ProtectedRoute>
           }
         />
