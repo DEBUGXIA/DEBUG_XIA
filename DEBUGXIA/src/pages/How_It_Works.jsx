@@ -4,10 +4,12 @@ import { TriangleAlert } from 'lucide-react'
 import { Cpu } from 'lucide-react'
 import { CircleCheck } from 'lucide-react'
 import { Minus } from 'lucide-react'
+import Navbar from '../components/Navbar'
 
 const How_It_Works = () => {
   return (
-    <div className=' flex flex-col items-center justify-between gap-20'>
+    <div>
+      <div className=' flex flex-col items-center justify-between gap-20'>
 
         <div className='flex flex-col items-center justify-between gap-10 mt-30'>
           <h1 className='font-bold text-5xl tracking-normal'>From error to <span className='bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent'>solution</span> in seconds</h1>
@@ -51,6 +53,7 @@ const How_It_Works = () => {
           <div className=' flex items-center py-5 px-50'>
             <img src="/public/How_It_Work.svg" alt=""  className='border-2 border-gray-500 rounded-2xl'/>
           </div>          
+    </div>
     </div>
   )
 }

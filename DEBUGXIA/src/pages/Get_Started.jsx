@@ -2,6 +2,8 @@ import React from 'react'
 import { motion } from "framer-motion";
 import SingIn from './SingIn'
 import { Link } from 'react-router-dom';
+import Home2 from '../pages2.o/Home2';
+
 
 const Get_Started = () => {
 
@@ -92,7 +94,7 @@ const item = {
           whileTap={{ scale: 0.95 }}
           className="mt-6 w-full py-3 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-medium tracking-wide"
         >
-          Sign Up
+          <Link to='/Home2'>Sign Up</Link>
         </motion.button>
 
         <p className="text-center text-gray-400 text-sm mt-4">

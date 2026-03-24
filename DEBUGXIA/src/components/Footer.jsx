@@ -1,4 +1,6 @@
 import React from 'react'
+import{Link} from 'react-router-dom'
+import About from '../pages/About'
 import Logo from './header/Logo'
 import Icons from './icon/Icons'
 
@@ -13,15 +15,32 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className=' flex flex-row items-center justify-between gap-50 -mt-35 mr-10 font-medium text-lg'>
-        <div>
-          <h1 className=' tracking-wide'>Contact</h1>
+      <div className=' flex flex-row items-center justify-between gap-50 -mt-35 mr-10 '>
+        <div className=' mt-35 flex items-start flex-col justify-between gap-5'>
+          <div><h1 className=' tracking-wide font-medium text-xl'>Contact</h1></div>
+          <div className=' flex flex-col items-start justify-between font-light text-lg text-white'>
+            <h2>subhadeepbiswas205@gmail.com</h2>
+            <h2>spedoriobusiness@gmail.com</h2>
+            <h2>sohelighosh30@gmail.com</h2>
+            <h2>sanchariray71@gmail.com</h2>
+            <h2>sikdarritisha@gmail.com</h2></div>
         </div>
-        <div>
-          <h1 className='tracking-wide'>Quick Links</h1>
+        <div className='mt-30 flex flex-col items-start justify-between gap-5'>
+          <div><h1 className='tracking-wide font-medium text-xl'>Quick Links</h1></div>
+          <div className='flex flex-col items-start justify-between font-light text-lg text-white'>
+            <Link to='/About'>About</Link>
+            <Link to='/Features'>Features</Link>
+            <Link to='/How_It_Works'>How It Works</Link>
+            <Link to='/Dashboard'>Download</Link>
+          </div>
         </div>
-        <div>
-          <h1 className='tracking-wide'>Legal</h1>
+        <div className='mt-25 flex flex-col items-start justify-between gap-5'>
+          <div><h1 className='tracking-wide font-medium text-xl'>Legal</h1></div>
+          <div className='flex flex-col items-start justify-between font-light text-lg text-white'>
+            <Link to='Terms_and_con'>Terms & Conditions</Link>
+            <Link to='/Privacy_Policy'>Privacy Policy</Link>
+            <Link to='/Refund_Policy'>Refund Policy</Link>
+          </div>
         </div>
       </div>
 

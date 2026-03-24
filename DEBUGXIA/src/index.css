@@ -1,9 +1,5 @@
 @import "tailwindcss";
 
-#right::-webkit-scrollbar{
-    display: none;
-}
-
 @theme {
   --font-display: "Funnel Display", sans-serif; 
 }
@@ -17,4 +13,20 @@
   100%{
     background-position: 100% 50%;
   }
+}
+
+/* Hide scrollbar for all elements */
+* {
+  scrollbar-width: none; /* Firefox */
+}
+
+*::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+
+
+html, body, #root {
+  height: 100%;
+  background: black;
 }

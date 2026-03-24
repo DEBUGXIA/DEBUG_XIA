@@ -4,13 +4,14 @@ import {MessageSquareWarning} from 'lucide-react'
 import {Lightbulb} from 'lucide-react'
 import { ChartLine } from 'lucide-react'
 import { GraduationCap } from 'lucide-react'
-import { motion } from "framer-motion";
+import Navbar from '../components/Navbar'
 
 
 
 const Features = () => {
   return (
-    <div className=' flex flex-col items-center justify-between gap-20'>
+    <div>
+      <div className=' flex flex-col items-center justify-between gap-20'>
 
       <div className=' flex flex-col items-center justify-between gap-5 mt-30'>
         <div>
@@ -56,6 +57,7 @@ const Features = () => {
 
       </div>
       
+    </div>
     </div>
   )
 }

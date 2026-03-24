@@ -3,14 +3,16 @@ import { Link } from 'react-router-dom'
 import Dashboard from './Dashboard'
 import Terminal from '../components/Terminal'
 import { motion } from "framer-motion";
+import Navbar from '../components/Navbar';
 
 import Features from './Features';
 import How_It_Works from './How_It_Works';
 
 const Home = () => {
   return (
-    <div
-    className='flex flex-col items-center justify-between gap-10'>
+    <div>
+    <div className='flex flex-col items-center justify-between gap-10 '>
+      
 
     <div className='flex flex-col items-center justify-between gap-10 mt-30'>
       <div className='flex flex-col items-center justify-between gap-8 '>
@@ -39,8 +41,7 @@ const Home = () => {
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="inline-block tracking-wide bg-gradient-to-r from-blue-500 to-cyan-400 text-xl font-semibold px-7 py-3 rounded-2xl"
-          > Connect With VS Code </motion.span></button>
+            className="inline-block tracking-wide bg-gradient-to-r from-blue-500 to-cyan-400 text-xl font-semibold px-7 py-3 rounded-2xl"> <Link to='/Get_Started'>Connect With VS Code</Link> </motion.span></button>
         <button>
           <Link to='/Dashboard'>
           <motion.span
@@ -104,6 +105,7 @@ const Home = () => {
 
     
 
+    </div>
     </div>
   )
 }
