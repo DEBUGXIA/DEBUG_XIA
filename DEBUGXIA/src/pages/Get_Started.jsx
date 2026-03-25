@@ -11,7 +11,7 @@ const Get_Started = ({setIsAuth}) => {
 
   const handleLogin = () => {
     setIsAuth(true);        
-    navigate("/Home2");     
+    navigate("/SingIn");     
   };
 
 const container = {
@@ -102,7 +102,7 @@ const item = {
           whileTap={{ scale: 0.95 }}
           className="mt-6 w-full py-3 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-medium tracking-wide"
         >
-          <Link to='/Home2'>Sign Up</Link>
+          <Link to='/SingIn'>Sign Up</Link>
         </motion.button>
 
         <p className="text-center text-gray-400 text-sm mt-4">
