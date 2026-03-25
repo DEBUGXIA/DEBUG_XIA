@@ -52,43 +52,7 @@ const SingIn = ({ setIsAuth }) => {
       />
 
       {/* 🦋 CENTER (UI) BURST */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-
-        {[...Array(25)].map((_, i) => {
-          const dir = directions[i % directions.length];
-
-          return (
-            <motion.img
-              key={i}
-              src="/R.svg"
-              alt="butterfly"
-              initial={{
-                x: 0,
-                y: 0,
-                opacity: 0,
-                scale: 0.6,
-              }}
-              animate={{
-                x: dir.x,
-                y: dir.y,
-                rotate: [0, 20, -15, 10, 0],
-                opacity: [0, 1, 1, 0],
-              }}
-              transition={{
-                duration: 6,
-                delay: i * 0.12,
-                ease: "easeInOut",
-              }}
-              className="absolute drop-shadow-[0_0_25px_rgba(96,165,250,0.8)]"
-              style={{
-                width: "400px",
-                height: "400px",
-              }}
-            />
-          );
-        })}
-
-      </div>
+      
 
       {/* Floating blur */}
       <motion.div
