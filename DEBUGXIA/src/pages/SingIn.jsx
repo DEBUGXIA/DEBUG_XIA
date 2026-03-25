@@ -1,17 +1,48 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { motion } from "framer-motion";
 import { Link, useNavigate } from 'react-router-dom';
+import { api } from '../api/config';
 
 const SingIn = ({ setIsAuth }) => {
 
   const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleLogin = () => {
-    setIsAuth(true);
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    
+    if (!email || !password) {
+      setError('Please enter email and password');
+      return;
+    }
 
-    setTimeout(() => {
-      navigate("/Home2");
-    }, 1200);
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await api.signin(email, password);
+      
+      if (response.access && response.refresh) {
+        // Save tokens to localStorage
+        localStorage.setItem('accessToken', response.access);
+        localStorage.setItem('refreshToken', response.refresh);
+        
+        setIsAuth(true);
+        
+        setTimeout(() => {
+          navigate("/Home2");
+        }, 800);
+      } else {
+        setError(response.non_field_errors?.[0] || 'Login failed');
+      }
+    } catch (err) {
+      setError('Login error: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const container = {
@@ -119,7 +150,9 @@ const SingIn = ({ setIsAuth }) => {
           <motion.input
             variants={item}
             type="email"
-            placeholder=" Email or Username"
+            placeholder="Email or Username"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full px-4 py-3 bg-transparent border border-gray-600 rounded-lg text-white focus:border-blue-400 outline-none"
           />
 
@@ -127,20 +160,33 @@ const SingIn = ({ setIsAuth }) => {
             variants={item}
             type="password"
             placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="w-full px-4 py-3 bg-transparent border border-gray-600 rounded-lg text-white focus:border-blue-400 outline-none"
           />
         </motion.div>
 
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-3 p-2 bg-red-500/20 border border-red-500 rounded text-red-400 text-sm text-center"
+          >
+            {error}
+          </motion.div>
+        )}
+
         <motion.button
           onClick={handleLogin}
+          disabled={loading}
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.6 }}
           whileHover={{ scale: 1.07, boxShadow: "0px 0px 20px #3b82f6" }}
           whileTap={{ scale: 0.95 }}
-          className="mt-6 w-full py-3 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-medium"
+          className="mt-6 w-full py-3 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-medium disabled:opacity-50"
         >
-          Sign In
+          {loading ? 'Signing In...' : 'Sign In'}
         </motion.button>
 
         <p className="text-center text-gray-400 text-sm mt-4">

@@ -1,17 +1,55 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { motion } from "framer-motion";
 import SingIn from './SingIn'
 import { Link, useNavigate } from 'react-router-dom';
 import Home2 from '../pages2.o/Home2';
+import { api } from '../api/config';
 
 
 const Get_Started = ({setIsAuth}) => {
 
   const navigate = useNavigate();
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleLogin = () => {
-    setIsAuth(true);        
-    navigate("/Home2");     
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    
+    if (!fullName || !email || !password || !passwordConfirm) {
+      setError('Please fill in all fields');
+      return;
+    }
+
+    if (password !== passwordConfirm) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await api.signup(fullName, email, password, passwordConfirm);
+      
+      if (response.access && response.refresh) {
+        // Save tokens to localStorage
+        localStorage.setItem('accessToken', response.access);
+        localStorage.setItem('refreshToken', response.refresh);
+        
+        setIsAuth(true);
+        navigate('/Home2');
+      } else {
+        setError(response.error || 'Signup failed');
+      }
+    } catch (err) {
+      setError('Signup error: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
 const container = {
@@ -75,6 +113,8 @@ const item = {
             variants={item}
             type="text"
             placeholder="Full Name"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
             className="w-full px-4 py-3 bg-transparent border border-gray-600 rounded-lg text-white focus:border-blue-400 outline-none transition"
           />
 
@@ -82,6 +122,8 @@ const item = {
             variants={item}
             type="email"
             placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full px-4 py-3 bg-transparent border border-gray-600 rounded-lg text-white focus:border-blue-400 outline-none transition"
           />
 
@@ -89,20 +131,42 @@ const item = {
             variants={item}
             type="password"
             placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-3 bg-transparent border border-gray-600 rounded-lg text-white focus:border-blue-400 outline-none transition"
+          />
+
+          <motion.input
+            variants={item}
+            type="password"
+            placeholder="Confirm Password"
+            value={passwordConfirm}
+            onChange={(e) => setPasswordConfirm(e.target.value)}
             className="w-full px-4 py-3 bg-transparent border border-gray-600 rounded-lg text-white focus:border-blue-400 outline-none transition"
           />
         </motion.div>
 
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-3 p-2 bg-red-500/20 border border-red-500 rounded text-red-400 text-sm text-center"
+          >
+            {error}
+          </motion.div>
+        )}
+
         <motion.button
-        onClick={handleLogin}
+          onClick={handleSignup}
+          disabled={loading}
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.6 }}
           whileHover={{ scale: 1.07, boxShadow: "0px 0px 20px #3b82f6" }}
           whileTap={{ scale: 0.95 }}
-          className="mt-6 w-full py-3 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-medium tracking-wide"
+          className="mt-6 w-full py-3 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-medium tracking-wide disabled:opacity-50"
         >
-          <Link to='/Home2'>Sign Up</Link>
+          {loading ? 'Creating Account...' : 'Sign Up'}
         </motion.button>
 
         <p className="text-center text-gray-400 text-sm mt-4">
