@@ -18,17 +18,16 @@ import Privacy_Policy from './pages/Privacy_Policy'
 import Refund_Policy from './pages/Refund_Policy'
 import Home2 from './pages2.o/Home2'
 import Profile from './pages2.o/Profile'
-import Dashboard2 from './pages2.o/Dashboard2'
+import Terminal2 from './pages2.o/Terminal2'
 import Error_History from './pages2.o/Error_History'
+import Edit_Profile from './pages2.o/Edit_Profile'
 
 // Protected Route (only for Home2 now)
 const ProtectedRoute = ({ isAuth, children }) => {
   return isAuth ? children : <Navigate to="/SingIn" />;
 };
 
-const ProtectedRoute2 = ({ isAuth, children }) => {
-  return isAuth ? children : <Navigate to="/Get_started" />;
-};
+
 
 // Public Route
 const PublicRoute = ({ isAuth, children }) => {
@@ -41,7 +40,7 @@ const App = () => {
   const location = useLocation();
 
   // Navbar2 only for Home2 (after login)
-  const afterLoginRoutes = ["/Home2", "/Profile","/Dashboard2","/Error_History"];
+  const afterLoginRoutes = ["/Home2", "/Profile","/Terminal2","/Error_History","/Edit_Profile"];
 
 const isAfterLoginRoute = afterLoginRoutes.some(route =>
   location.pathname.startsWith(route)
@@ -64,6 +63,7 @@ const isAfterLoginRoute = afterLoginRoutes.some(route =>
         <Route path='/' element={<Home />} />
         <Route path='/Features' element={<Features />} />
         <Route path='/How_It_Works' element={<How_It_Works />} />
+        <Route path='/Get_Started' element={<Get_Started />} />
         <Route path='/About' element={<About />} />
         <Route path='/Dashboard' element={<Dashboard />} />
 
@@ -77,14 +77,7 @@ const isAfterLoginRoute = afterLoginRoutes.some(route =>
           }
         />
 
-        <Route
-          path='/Get_Started'
-          element={
-            <PublicRoute isAuth={isAuth}>
-              <Get_Started setIsAuth={setIsAuth} />
-            </PublicRoute>
-          }
-        />
+        
 
         {/* AFTER LOGIN ONLY */}
         <Route
@@ -104,10 +97,10 @@ const isAfterLoginRoute = afterLoginRoutes.some(route =>
           }
         />
         <Route
-          path='/Dashboard2'
+          path='/Terminal2'
           element={
             <ProtectedRoute isAuth={isAuth}>
-              <Dashboard2 />
+              <Terminal2 />
             </ProtectedRoute>
           }
         />
@@ -116,6 +109,15 @@ const isAfterLoginRoute = afterLoginRoutes.some(route =>
           element={
             <ProtectedRoute isAuth={isAuth}>
               <Error_History/>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path='/Edit_Profile'
+          element={
+            <ProtectedRoute isAuth={isAuth}>
+              <Edit_Profile/>
             </ProtectedRoute>
           }
         />

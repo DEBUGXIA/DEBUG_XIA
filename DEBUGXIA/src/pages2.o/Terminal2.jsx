@@ -1,7 +1,7 @@
 import React from 'react'
 import Terminal from '../components/Terminal'
 
-const Dashboard = () => {
+const Terminal2 = () => {
   return (
     <div className=' flex flex-col justify-between ml-20 mt-10 '>
       <div className=' flex flex-col items-start justify-between gap-3 mt-3 ml-5'>
@@ -21,4 +21,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default Terminal2
