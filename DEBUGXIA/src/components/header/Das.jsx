@@ -1,4 +1,6 @@
 import React from 'react'
+import {LogOut} from 'lucide-react'
+import {Link} from 'react-router-dom'
 
 const Das = () => {
 
@@ -33,7 +35,8 @@ const Das = () => {
     ];
 
   return (
-    <div><div className=' flex flex-col items-center justify-between gap-2 w-350'>
+    <div>
+      <div className=' flex flex-col items-center justify-between gap-2 w-350'>
             {/* ================= WEEKLY ACTIVITY CARD ================= */}
 <div 
   className="bg-gray-800 border border-gray-400 rounded-xl p-6 mt-6 hover:border-blue-500 transition-all duration-300  w-350">
@@ -173,6 +176,12 @@ const Das = () => {
     );
   })}
 </div>
+        </div>
+        <div className=' flex flex-row items-center justify-between mt-5'>
+          <div className='flex flex-row items-center justify-between mt-5  bg-red-500 border-2 border-white py-1.5 px-4 rounded-2xl'>
+            <div><LogOut strokeWidth={1.25} /></div>
+            <button className=' font-medium text-lg text-white'><Link to='/'>Log Out</Link></button>
+          </div>
         </div>
 </div>
   )

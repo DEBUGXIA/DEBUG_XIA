@@ -28,22 +28,15 @@ const SingIn = ({ setIsAuth }) => {
     show: { opacity: 1, y: 0 },
   };
 
-  const directions = [
-    { x: -800, y: -400 }, { x: 800, y: -400 },
-    { x: -900, y: 300 },  { x: 900, y: 300 },
-    { x: -700, y: 500 },  { x: 700, y: 500 },
-    { x: -1000, y: 0 },   { x: 1000, y: 0 },
-    { x: -600, y: -600 }, { x: 600, y: -600 },
-    { x: -1100, y: 200 }, { x: 1100, y: -200 },
-  ];
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center gap-20 bg-[#020617] overflow-hidden relative">
 
-      {/* 🌌 Background */}
+      {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-r from-blue-900 via-black to-cyan-900 opacity-30 animate-pulse" />
 
-      {/* ✨ Glow */}
+      {/* Glow */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: [0.2, 0.5, 0.2] }}
@@ -51,7 +44,7 @@ const SingIn = ({ setIsAuth }) => {
         className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-white/10 to-cyan-300/20 blur-3xl"
       />
 
-      {/* 🦋 CENTER (UI) BURST */}
+      
       
 
       {/* Floating blur */}
