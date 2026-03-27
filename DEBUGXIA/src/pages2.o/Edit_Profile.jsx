@@ -1,18 +1,19 @@
 import React from 'react'
 import {NotebookPen} from 'lucide-react'
 import {UserRoundPen} from 'lucide-react'
-import {Link} from 'lucide-react'
+import {Link2} from 'lucide-react'
+import Dasboard2 from '../components/header/Dasboard2'
+import {Link} from 'react-router-dom'
+import Das from '../components/header/Das'
 
 const Edit_Profile = () => {
   return (
+    <div className=' flex flex-col items-center justify-between gap-3'>
     <div className='flex flex-row items-center justify-between mt-10 px-20 w-full gap-5'>
       <div className=' flex flex-row items-center justify-between w-full gap-5 '>
         <div className=' flex flex-col items-center justify-between gap-2 w-1/4 '>
           <div>
             <img src="/public/User.jpeg" alt="" className=' w-70 h-70 border-2 border-gray-500 rounded-full'/>
-          </div>
-          <div className=' bg-gray-900 border-2 border-gray-500 rounded-xl text-gray-400 py-1 px-4 tracking-wide'>
-            <h1 className='text-gray-400 bg-gray-900 font-normal text-sm tracking-wide'>Edit Profile Picture</h1>
           </div>
 
           <div className=' flex flex-row items-center justify-between gap-1.5'>
@@ -49,29 +50,39 @@ const Edit_Profile = () => {
           </div>
 
           <div className=' flex flex-row items-center justify-between gap-1.5'>
-            <div><Link strokeWidth={1.25} /></div>
+            <div><Link2 strokeWidth={1.25} /></div>
             <div>
               <input type="text" placeholder='Enter Url 1' className='px-4 py-1.5 text-gray-400 bg-gray-900 font-normal text-lg tracking-wide border-gray-500 border-1 rounded-xl w-70' />
             </div>
           </div>
 
           <div className=' flex flex-row items-center justify-between gap-1.5'>
-            <div><Link strokeWidth={1.25} /></div>
+            <div><Link2 strokeWidth={1.25} /></div>
             <div>
               <input type="text" placeholder='Enter Url 2' className='px-4 py-1.5 text-gray-400 bg-gray-900 font-normal text-lg tracking-wide border-gray-500 border-1 rounded-xl w-70' />
             </div>
           </div>
 
           <div className=' flex flex-row items-center justify-between gap-1.5'>
-            <div><Link strokeWidth={1.25} /></div>
+            <div><Link2 strokeWidth={1.25} /></div>
             <div>
               <input type="text" placeholder='Enter Url 3' className='px-4 py-1.5 text-gray-400 bg-gray-900 font-normal text-lg tracking-wide border-gray-500 border-1 rounded-xl w-70' />
             </div>
           </div>
 
+          <div className=' bg-green-600 border-2 border-white rounded-xl text-white py-1 px-4 tracking-wide mt-3'>
+            <h1 className='font-medium text-lg tracking-wide'><Link to='/Profile'>Save</Link></h1>
+          </div>
+
         </div>
 
+        <Dasboard2/>
+
       </div>
+    </div>
+
+    <Das/>
+    
     </div>
   )
 }

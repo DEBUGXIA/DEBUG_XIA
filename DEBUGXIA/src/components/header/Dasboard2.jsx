@@ -1,14 +1,21 @@
 import React from 'react'
+import {Bug} from 'lucide-react'
+import {CircleCheckBig} from 'lucide-react'
+import {Zap} from 'lucide-react'
+import {Radar} from 'lucide-react'
+import {ChartNoAxesCombined} from 'lucide-react'
 
 const Dasboard2 = () => {
 
     const stats = [
-        { title: "Total Errors", value: 24 },
-        { title: "Resolved", value: 18 },
-        { title: "Critical", value: 2 },
-        { title: "Quality", value: "75%" },
-        { title: "Improvement", value: "75%" },
+        { title: "Total Errors", value: 24, Logo: <Bug color="#f04c4c" strokeWidth={1.25} />},
+        { title: "Resolved", value: 18, Logo: <CircleCheckBig color="#4cf05f" strokeWidth={1.25} /> },
+        { title: "Critical", value: 2, Logo: <Zap color="#b335ed" strokeWidth={1.25} /> },
+        { title: "Quality", value: "75%", Logo: <Radar color="#638afd" strokeWidth={1.25} /> },
+        { title: "Improvement", value: "75%", Logo: <ChartNoAxesCombined color="#4cf05f" strokeWidth={1.25} /> },
     ];
+
+    
 
     const errors = [
         { name: "TypeError", count: 8 },
@@ -32,54 +39,32 @@ const Dasboard2 = () => {
         "Testing",
     ];
 
-    const weekly = [60, 40, 80, 50, 30, 10, 35];
-
-    const recentErrors = [
-        {
-            title: "TypeError",
-            msg: "Cannot read property 'map' of undefined",
-            level: "high",
-        },
-        {
-            title: "ReferenceError",
-            msg: "user is not defined",
-            level: "critical",
-        },
-        {
-            title: "SyntaxError",
-            msg: "Unexpected token }",
-            level: "medium",
-        },
-        {
-            title: "TypeError",
-            msg: "this.setState is not a function",
-            level: "high",
-        },
-        {
-            title: "NullPointerException",
-            msg: "Null reference exception in module",
-            level: "low",
-        },
-    ];
+    
 
   return (
-    <div className='flex flex-row items-center justify-between mt-10 px-20  w-full gap-2'>
+
+    <div className=' bg-amber flex flex-col items-center justify-between gap-10'>
+
+    <div className='flex flex-col items-center justify-between mt-10 px-20  w-full gap-2 bg-green'>
       <div className=' flex flex-row items-center justify-between w-300  gap-2 -ml-10 '>
+        <div className='w-240 flex flex-col items-center justify-between gap-2 bg-amber'>
 
-        <div className='w-240 bg-gray-900 flex flex-col items-center justify-between gap-2 border-2 border-gray-500 h-220 rounded-2xl'>
 
-        <div className="bg-gray-900 min-h-screen text-white p-6">
+        <div className=" min-h-screen text-white p-6">
             
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-6">
                 {stats.map((item, i) => (
-                    <div
-                        key={i}
-                        className="bg-gray-800 border border-gray-400 rounded-xl p-4 
+                    <div className=' flex flex-row items-center justify-between gap-2 bg-gray-800 border border-gray-400 rounded-xl p-4 
                         hover:border-blue-500 hover:shadow-blue-500/20 hover:shadow-lg 
-                        transition-all duration-300"
-                    >
-                        <p className="text-sm text-gray-400">{item.title}</p>
-                        <h2 className="text-2xl font-bold mt-2">{item.value}</h2>
+                        transition-all duration-300'>
+                        <div>{item.Logo}</div>
+                        <div className=' flex flex-col items-center justify-between gap-1'>
+                        <div
+                        key={i}>
+                        <p className="text-sm text-gray-400 tracking-wide">{item.title}</p>
+                        <h2 className="text-2xl font-bold mt-2 tracking-wide">{item.value}</h2>
+                    </div>
+                    </div>
                     </div>
                 ))}
             </div>
@@ -209,8 +194,14 @@ const Dasboard2 = () => {
             </div>
         </div>
 
+        
       </div>
     </div>
+    
+    </div>
+
+    
+
     </div>
   )
 }
