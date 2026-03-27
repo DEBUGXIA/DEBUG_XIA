@@ -9,7 +9,7 @@ const Terminal2 = () => {
           <h1 className='bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent tracking-wide font-bold text-4xl'>Code Analyzer</h1>
         </div>
         <div>
-          <p className='font-medium text-lg text-gray-500 tracking-wide'>
+          <p className='font-medium text-lg text-gray-300 tracking-wide'>
             Upload your code and let AI optimize it. See detailed error analysis and improvement<br></br><span>suggestions in real-time.</span>
           </p>
         </div>

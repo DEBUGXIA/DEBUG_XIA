@@ -54,7 +54,7 @@ const Dasboard2 = () => {
             
             <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-6">
                 {stats.map((item, i) => (
-                    <div className=' flex flex-row items-center justify-between gap-2 bg-gray-800 border border-gray-400 rounded-xl p-4 
+                    <div className=' flex flex-row items-center justify-between gap-2 bg-gray-900 border border-gray-400 rounded-xl p-4 
                         hover:border-blue-500 hover:shadow-blue-500/20 hover:shadow-lg 
                         transition-all duration-300'>
                         <div>{item.Logo}</div>
