@@ -1,9 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Search } from 'lucide-react'
 
 const History = () => {
+
+  const options = ["All Severity", "Low", "Medium", "High", "Critical"];
+
+  const [selected, setSelected] = useState("All Severity");
+  const [open, setOpen] = useState(false);
+
   return (
-    <div className=' flex flex-col justify-between ml-20 mt-10 gap-8 w-screen'>
+    <div className=' flex flex-col justify-between ml-20 mt-10 gap-8 w-full mr-20'>
 
         <div className=' flex flex-col items-start justify-between gap-2 mt-3 ml-5'>
             <div className=''>
@@ -29,8 +35,38 @@ const History = () => {
               </search>
             </div>
 
-            <div className=' flex flex-row items-start justify-between gap-2 w-1/3'>
-              
+            <div className="flex flex-row items-start justify-between gap-2 w-1/3 bg-blue-300 mr-20">
+  
+              <div className="">
+      
+      
+      <button
+        onClick={() => setOpen(!open)}
+        className="bg-gray-900 text-white border border-gray-700 px-4 py-2 rounded-lg flex items-center gap-2 hover:border-blue-500 transition"
+      >
+        {selected}
+        <span className="text-gray-400">▼</span>
+      </button>
+
+      
+      {open && (
+        <div className="absolute mt-2 w-full bg-gray-200 rounded-md shadow-lg z-50">
+          {options.map((item, index) => (
+            <div
+              key={index}
+              onClick={() => {
+                setSelected(item);
+                setOpen(false);
+              }}
+              className="px-4 py-2 text-gray-800 hover:bg-gray-300 cursor-pointer"
+            >
+              {item}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+
             </div>
 
           </div>

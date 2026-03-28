@@ -64,6 +64,13 @@ const Analysis_History = () => {
   }
 ];
 
+const data = [
+  { label: "Week 1", start: 65, end: 72 },
+  { label: "Week 2", start: 72, end: 78 },
+  { label: "Week 3", start: 78, end: 83 },
+  { label: "This Week", start: 83, end: 87 },
+];
+
   return (
     <div className='flex flex-col justify-between ml-10 mt-10 gap-10 w-screen px-10'>
 
@@ -152,6 +159,48 @@ const Analysis_History = () => {
       </div>
 
         ))}
+      </div>
+
+      <div className=' w-320 '>
+        <div className="bg-gray-900 border border-blue-900 rounded-xl p-6 w-full">
+      
+     
+      <div className=' flex flex-row items-start gap-1'>
+        <div><ChartNoAxesCombined color="#4fe388" strokeWidth={1.25} /></div>
+        <div>
+          <h2 className="text-white text-lg font-semibold mb-6 flex items-center gap-2">Quality Improvement Trend</h2>
+        </div>
+      </div>
+
+      
+      <div className="space-y-6">
+        {data.map((item, index) => {
+          const width = item.end; 
+
+          return (
+            <div key={index}>
+              
+              
+              <div className="flex justify-between text-sm text-gray-300 mb-1">
+                <span>{item.label}</span>
+                <span>
+                  {item.start}% → {item.end}%
+                </span>
+              </div>
+
+             
+              <div className="w-full h-2 bg-gray-800 rounded-full overflow-hidden">
+                
+               
+                <div
+                  className="h-full rounded-full w-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-500"></div>
+
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
       </div>
 
 
