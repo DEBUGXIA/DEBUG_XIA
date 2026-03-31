@@ -1,5 +1,5 @@
 import React from 'react'
-import { Terminal, Play, CircleCheckBig, CodeXml } from 'lucide-react'
+import { Terminal, Play, CircleCheckBig, CodeXml, SquareChevronRight } from 'lucide-react'
 import Terminal3 from '../components/Terminal3'
 
 const Terminal2 = () => {
@@ -48,8 +48,18 @@ const Terminal2 = () => {
         
       </div>
 
-      <div className='-ml-35 -mt-15'>
+      <div className='-ml-40 -mt-15'>
         <Terminal3/>
+      </div>
+
+      <div className=' bg-gray-900 border-1 border-gray-500 rounded-xl p-5 mr-35 -mt-18 h-40 flex flex-col gap-3'>
+        <div className=' flex flex-row  gap-3'>
+          <div><SquareChevronRight color="#a6a6a6" strokeWidth={1.25} /></div>
+          <div><h1>Terminal</h1></div>
+        </div>
+        <div>
+          <textarea name="" id="" className=' w-[100%] h-20 rounded-md '></textarea>
+        </div>
       </div>
 
     </div>
