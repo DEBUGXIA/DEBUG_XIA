@@ -22,6 +22,7 @@ import Terminal2 from './pages2.o/Terminal2'
 import Error_History from './pages2.o/Error_History'
 import Edit_Profile from './pages2.o/Edit_Profile'
 import Analysis_History from './pages2.o/Analysis_History'
+import Optimizer from './pages2.o/Optimizer'
 
 // Protected Route (only for Home2 now)
 const ProtectedRoute = ({ isAuth, children }) => {
@@ -41,7 +42,7 @@ const App = () => {
   const location = useLocation();
 
   // Navbar2 only for Home2 (after login)
-  const afterLoginRoutes = ["/Home2", "/Profile","/Terminal2","/Error_History","/Edit_Profile","/Analysis_History"];
+  const afterLoginRoutes = ["/Home2", "/Profile","/Terminal2","/Error_History","/Edit_Profile","/Analysis_History","/Optimizer"];
 
 const isAfterLoginRoute = afterLoginRoutes.some(route =>
   location.pathname.startsWith(route)
@@ -128,6 +129,15 @@ const isAfterLoginRoute = afterLoginRoutes.some(route =>
           element={
             <ProtectedRoute isAuth={isAuth}>
               <Edit_Profile/>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path='/Optimizer'
+          element={
+            <ProtectedRoute isAuth={isAuth}>
+              <Optimizer/>
             </ProtectedRoute>
           }
         />
