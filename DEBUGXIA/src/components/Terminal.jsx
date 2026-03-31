@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Icon from '../components/icon/icon'
+import { Play } from 'lucide-react'
 
 const Terminal = () => {
 
@@ -50,8 +50,11 @@ const Terminal = () => {
   
           <textarea placeholder='Enter Your Code . . . ' name="" id=""className='bg-gray-900 px-5 py-2 font-semibold text-lg tracking-wide border-white rounded-md border-1 h-60'value={details} onChange={(e) => {setDetails(e.target.value)}}></textarea>
   
-          <div className='flex items-center justify-center'>
-            <button className=' text-white px-4 py-2 font-semibold text-lg tracking-wide rounded-2xl w-50 text-center bg-gradient-to-r from-blue-500 to-cyan-400'>Run Your Code</button>
+          <div className='flex items-center justify-center '>
+            <button className=' text-white px-4 py-2 font-semibold text-lg tracking-wide rounded-2xl w-50 text-center bg-gradient-to-r from-blue-500 to-cyan-400 flex flex-row items-center justify-between'>
+              <div><Play strokeWidth={1.75} /></div>
+              <div><h1>Run Your Code</h1></div>
+            </button>
           </div>
 
           </div>
