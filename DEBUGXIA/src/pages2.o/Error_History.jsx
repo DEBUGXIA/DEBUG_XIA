@@ -16,7 +16,7 @@ const History = () => {
                 <h1 className='bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent tracking-wide font-bold text-4xl'>Error History</h1>
             </div>
             <div>
-                <p className='font-medium text-lg text-gray-300 tracking-wide'>Browse and manage your coding errors with AI insights.</p>
+                <p className='font-medium text-lg text-gray-400 tracking-wide'>Browse and manage your coding errors with AI insights.</p>
             </div>
         </div>
 
