@@ -50,7 +50,7 @@ const isAfterLoginRoute = afterLoginRoutes.some(route =>
 
 
   return (
-    <div className='bg-[url(/public/Bg.svg)] h-screen text-white relative overflow-x-hidden scroll-smooth min-h-screen overflow-y-auto bg-cover  w-[100%] aspect-[16/9]'>
+    <div className='bg-[url(/public/Bg3.svg)] h-screen text-white relative overflow-x-hidden scroll-smooth min-h-screen overflow-y-auto bg-cover  w-[100%] aspect-[16/9]'>
 
       {/* CONDITIONAL NAVBAR */}
       {isAuth && isAfterLoginRoute ? (

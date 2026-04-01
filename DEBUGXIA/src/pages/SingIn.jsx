@@ -29,42 +29,11 @@ const SignIn = ({ setIsAuth }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center gap-20 overflow-hidden relative bg-black">
+    <div className="min-h-screen flex items-center justify-center gap-20 overflow-hidden relative">
 
-      {/* 🎥 Video Background */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover z-0"
-      >
-        <source src="/public/Bg2.mp4" type="video/mp4" />
-      </video>
+      
 
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/60 z-0" />
-
-      {/* Glow effect */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: [0.2, 0.5, 0.2] }}
-        transition={{ duration: 3, repeat: Infinity }}
-        className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-white/10 to-cyan-300/20 blur-3xl z-0"
-      />
-
-      {/* Floating blur */}
-      <motion.div
-        animate={{ y: [0, -30, 0] }}
-        transition={{ repeat: Infinity, duration: 5 }}
-        className="absolute w-[400px] h-[400px] bg-blue-500/20 blur-[120px] rounded-full top-[-100px] left-[-100px] z-0"
-      />
-
-      <motion.div
-        animate={{ y: [0, 30, 0] }}
-        transition={{ repeat: Infinity, duration: 6 }}
-        className="absolute w-[400px] h-[400px] bg-cyan-400/20 blur-[120px] rounded-full bottom-[-100px] right-[-100px] z-0"
-      />
+      
 
       {/*Login Card */}
       <motion.div
@@ -105,7 +74,7 @@ const SignIn = ({ setIsAuth }) => {
           transition={{ delay: 0.6 }}
           whileHover={{ scale: 1.07, boxShadow: "0px 0px 20px #3b82f6" }}
           whileTap={{ scale: 0.95 }}
-          className="mt-6 w-full py-3 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-medium"
+          className="mt-6 w-full py-3 rounded-2xl bg-gradient-to-r from-blue-500 to-fuchsia-400 text-white font-medium"
         >
           Sign In
         </motion.button>
