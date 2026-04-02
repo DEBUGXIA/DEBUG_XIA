@@ -18,12 +18,12 @@ const Terminal2 = () => {
         <div className=' flex flex-row items-center justify-between gap-3'>
           <div><Terminal size={35} color="#5fa8ec" strokeWidth={1.75} /></div>
           <div>
-          <h1 className='bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent tracking-wide font-bold text-4xl'>Terminal & Code Execution</h1>
+          <h1 className='bg-gradient-to-r from-blue-500 to-fuchsia-400 text-shadow-lg bg-clip-text text-transparent tracking-wide font-bold text-4xl'>Terminal & Code Execution</h1>
         </div>
         </div>
 
         <div>
-          <p className='font-medium text-lg text-gray-400 tracking-wide'>
+          <p className='font-medium text-lg text-gray-300 text-shadow-lg tracking-wide'>
             Execute your code and view terminal output in real-time
           </p>
         </div>

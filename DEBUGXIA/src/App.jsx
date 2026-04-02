@@ -24,6 +24,7 @@ import Edit_Profile from './pages2.o/Edit_Profile'
 import Analysis_History from './pages2.o/Analysis_History'
 import Optimizer from './pages2.o/Optimizer'
 
+
 // Protected Route (only for Home2 now)
 const ProtectedRoute = ({ isAuth, children }) => {
   return isAuth ? children : <Navigate to="/SingIn" />;
@@ -51,6 +52,8 @@ const isAfterLoginRoute = afterLoginRoutes.some(route =>
 
   return (
     <div className='bg-[url(/public/Bg3.svg)] h-screen text-white relative overflow-x-hidden scroll-smooth min-h-screen overflow-y-auto bg-cover  w-[100%] aspect-[16/9]'>
+
+  
 
       {/* CONDITIONAL NAVBAR */}
       {isAuth && isAfterLoginRoute ? (
