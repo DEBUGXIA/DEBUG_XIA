@@ -11,7 +11,7 @@ import Navbar from '../components/Navbar'
 const Features = () => {
   return (
 
-      <div className=' flex flex-col items-center justify-between gap-20 w-[100%] aspect-[16/9]'>
+      <div className=' flex flex-col items-center justify-between gap-20 w-[100%]'>
 
       <div className=' flex flex-col items-center justify-between gap-5 mt-30'>
         <div>
