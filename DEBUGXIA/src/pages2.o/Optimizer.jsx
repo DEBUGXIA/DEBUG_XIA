@@ -19,12 +19,12 @@ const Optimizer = () => {
         <div className=' flex flex-row items-center justify-between gap-3'>
           <div><Zap size={35} color="#5f7fdd" strokeWidth={1.25} /></div>
           <div>
-          <h1 className='bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent tracking-wide font-bold text-4xl'>Code Optimizer</h1>
+          <h1 className='text-white text-shadow-lg  tracking-wide font-bold text-4xl'>Code Optimizer</h1>
         </div>
         </div>
 
         <div>
-          <p className='font-medium text-lg text-gray-400 tracking-wide'>
+          <p className='font-medium text-lg text-gray-300 tracking-wide'>
             Intelligent code analysis and optimization recommendations
           </p>
         </div>

@@ -74,16 +74,16 @@ const data = [
   return (
     <div className='flex flex-col justify-between ml-10 mt-10 gap-10 w-screen px-10'>
 
-      <div className='flex flex-col items-start gap-2 mt-3 ml-5'>
-        <h1 className='bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent font-bold text-4xl'>
+      <div className='flex flex-col items-center gap-2 mt-15 ml-5'>
+        <h1 className='bg-gradient-to-r from-blue-500 to-fuchsia-400 text-shadow-lg bg-clip-text text-transparent font-bold text-5xl'>
           Analysis History
         </h1>
-        <p className='font-medium text-lg text-gray-300'>
+        <p className='font-medium text-lg text-gray-300 mt-5'>
           Track all your code analyses and improvements.
         </p>
       </div>
 
-      <div className='flex flex-row items-center justify-between gap-15 mr-20  px-5 bg-green '>
+      <div className='flex flex-row items-center justify-between gap-15 mr-20  px-5 bg-green mt-10 '>
 
         {Analysis.map((item, idx) => (
           <div

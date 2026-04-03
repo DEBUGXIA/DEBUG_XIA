@@ -11,16 +11,16 @@ const History = () => {
   return (
     <div className=' flex flex-col justify-between ml-20 mt-10 gap-8 w-full mr-20'>
 
-        <div className=' flex flex-col items-start justify-between gap-2 mt-3 ml-5'>
+        <div className=' flex flex-col items-center justify-between gap-2 mt-15 ml-5'>
             <div className=''>
-                <h1 className='bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent tracking-wide font-bold text-4xl'>Error History</h1>
+                <h1 className='bg-gradient-to-r from-blue-500 to-fuchsia-400 text-shadow-lg bg-clip-text text-transparent tracking-wide font-bold text-5xl'>Error History</h1>
             </div>
             <div>
-                <p className='font-medium text-lg text-gray-400 tracking-wide'>Browse and manage your coding errors with AI insights.</p>
+                <p className='font-medium text-lg text-gray-300 tracking-wide mt-5'>Browse and manage your coding errors with AI insights.</p>
             </div>
         </div>
 
-        <div className=' flex flex-col items-center justify-between gap-3 mr-10'>
+        <div className=' flex flex-col items-center justify-between gap-3 mr-10 mt-10'>
 
           <div className=' flex flex-row items-center justify-between gap-5 w-full mr-10'>
 
