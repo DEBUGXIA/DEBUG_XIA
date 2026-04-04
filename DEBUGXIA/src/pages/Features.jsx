@@ -26,13 +26,13 @@ const Features = () => {
 
         <div className=' flex flex-row items-center justify-between gap-6'>
 
-          <div className='rounded-2xl bg-white/5 backdrop-blur-xl shadow-2xl px-8 py-8 flex flex-col items-start justify-between gap-5 w-145'>
+          <div className='rounded-2xl bg-white/5 backdrop-blur-xl shadow-2xl px-8 py-7 flex flex-col items-start justify-between gap-5 w-145'>
             <div className=' flex items-center justify-center h-10 w-10 rounded-xl mb-3'><MessageSquareWarning color="#609ee2" /></div>
             <h1 className=' text-2xl font-semibold mb-3'>AI Error Explanation</h1>
             <p className='font-medium text-sm text-gray-300 tracking-wide mb-3'>Explains terminal errors and runtime errors in simple, plain-English <br></br>language. No more deciphering cryptic stack traces.</p>  
           </div>
 
-          <div className=' rounded-2xl bg-white/5 backdrop-blur-xl shadow-2xl rounded-2xl px-8 py-8 flex flex-col items-start justify-between gap-3 w-145'>
+          <div className=' rounded-2xl bg-white/5 backdrop-blur-xl shadow-2xl px-8 py-8 flex flex-col items-start justify-between gap-3 w-145'>
             <div className=' flex items-center justify-center h-10 w-10 rounded-xl mb-3'><Lightbulb color="#609ee2" /></div>
             <h1 className=' text-2xl font-semibold b-3'>Smart Code Suggestions</h1>
             <p className='font-medium text-sm text-gray-300 tracking-wide m-3'>AI analyzes your code patterns and suggests better practices, <br></br>refactors, and architectural improvements.</p>  

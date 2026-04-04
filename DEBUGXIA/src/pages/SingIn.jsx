@@ -29,7 +29,7 @@ const SignIn = ({ setIsAuth }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center gap-20 overflow-hidden relative">
+    <div className="min-h-screen flex items-center justify-center gap-20 overflow-hidden">
 
       
 
@@ -40,7 +40,7 @@ const SignIn = ({ setIsAuth }) => {
         initial={{ opacity: 0, scale: 0.7, x: -100 }}
         animate={{ opacity: 1, scale: 1, x: 0 }}
         transition={{ duration: 0.8 }}
-        className="relative z-10 w-[360px] p-8 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl"
+        className=" w-[360px] p-8 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl"
       >
         <h2 className="text-white text-2xl font-semibold text-center mb-6 tracking-wide">
           Sign In Your Account
@@ -88,7 +88,7 @@ const SignIn = ({ setIsAuth }) => {
       </motion.div>
 
       {/* Side Text */}
-      <div className='z-10 flex items-center justify-center font-semibold text-7xl font-serif'>
+      <div className=' flex items-center justify-center font-semibold text-7xl font-serif'>
         <h1>
           <motion.span
             initial={{ opacity: 0, x: 100 }}

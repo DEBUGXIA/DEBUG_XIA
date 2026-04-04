@@ -23,6 +23,7 @@ import Error_History from './pages2.o/Error_History'
 import Edit_Profile from './pages2.o/Edit_Profile'
 import Analysis_History from './pages2.o/Analysis_History'
 import Optimizer from './pages2.o/Optimizer'
+import Dashboard2 from './pages2.o/Dashboard2'
 
 
 // Protected Route (only for Home2 now)
@@ -43,15 +44,22 @@ const App = () => {
   const location = useLocation();
 
   // Navbar2 only for Home2 (after login)
-  const afterLoginRoutes = ["/Home2", "/Profile","/Terminal2","/Error_History","/Edit_Profile","/Analysis_History","/Optimizer"];
+  const afterLoginRoutes = [
+  "/Home2",
+  "/Profile",
+  "/Terminal2",
+  "/Error_History",
+  "/Edit_Profile",
+  "/Analysis_History",
+  "/Optimizer",
+  "/Dashboard2"
+];
 
-const isAfterLoginRoute = afterLoginRoutes.some(route =>
-  location.pathname.startsWith(route)
-);
+const isAfterLoginRoute = afterLoginRoutes.includes(location.pathname);
 
 
   return (
-    <div className='bg-[url(/public/Bg3.svg)] h-screen text-white relative overflow-x-hidden scroll-smooth min-h-screen overflow-y-auto bg-cover  w-[100%] aspect-[16/9]'>
+    <div className='bg-[url(/public/Bg3.svg)] h-screen text-white overflow-x-hidden scroll-smooth min-h-screen overflow-y-auto bg-cover  w-[100%] aspect-[16/9]'>
 
   
 
@@ -132,6 +140,15 @@ const isAfterLoginRoute = afterLoginRoutes.some(route =>
           element={
             <ProtectedRoute isAuth={isAuth}>
               <Edit_Profile/>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path='/Dashboard2'
+          element={
+            <ProtectedRoute isAuth={isAuth}>
+              <Dashboard2/>
             </ProtectedRoute>
           }
         />

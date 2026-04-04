@@ -39,16 +39,16 @@ const Terminal = () => {
             <div className=' mr-5 w-1/2 flex items-center font-medium text-lg text-gray-300 tracking-wide'>
             <label for="cars">Choose Your Language :</label>
 
-              <select name="cars" id="cars"  className='bg-gray-900 text-white w-20'>
-                <option value="volvo">Python</option>
-                <option value="saab">Java</option>
-                <option value="mercedes">C</option>
-                <option value="audi">C++</option>
+              <select name="cars" id="cars"  className=' text-white w-20'>
+                <option value="volvo" className=' bg-gray-900'>Python</option>
+                <option value="saab" className=' bg-gray-900'>Java</option>
+                <option value="mercedes" className=' bg-gray-900'>C</option>
+                <option value="audi" className=' bg-gray-900'>C++</option>
               </select>
               </div>
           </div>
   
-          <textarea placeholder='Your Code . . . ' name="" id=""className='bg-gray-900 px-5 py-2 font-semibold text-lg tracking-wide border-gray-500 rounded-md border-1 h-60'value={details} onChange={(e) => {setDetails(e.target.value)}}></textarea>
+          <textarea placeholder='Your Code . . . ' name="" id=""className='bg-gray-900 px-5 py-2 font-semibold text-lg tracking-wide border-gray-500 rounded-lg border-1 h-60'value={details} onChange={(e) => {setDetails(e.target.value)}}></textarea>
   
           <div className='flex items-center justify-center '>
             <button className=' text-white px-4 py-2 font-semibold text-lg tracking-wide rounded-2xl w-50 text-center bg-gradient-to-r from-blue-500 to-fuchsia-400 flex flex-row items-center justify-between'>

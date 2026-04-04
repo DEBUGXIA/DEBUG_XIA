@@ -29,7 +29,7 @@ const item = {
 };
 
   return (
-    <div className="min-h-screen flex items-center justify-center gap-20 overflow-hidden relative">
+    <div className="min-h-screen flex items-center justify-center gap-20 overflow-hidden">
 
       <div className='bg-blue flex items-center justify-center
       font-semibold text-7xl font-serif gap-3'>
@@ -51,7 +51,7 @@ const item = {
         initial={{ opacity: 0, scale: 0.7, x: 100 }}
         animate={{ opacity: 1, scale: 1, x: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="relative w-[360px] p-8 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl"
+        className=" w-[360px] p-8 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl"
       >
         <h2 className="text-white text-2xl font-semibold text-center mb-6  tracking-wide">
           Create Account

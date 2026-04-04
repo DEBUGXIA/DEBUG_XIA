@@ -2,9 +2,9 @@ import React from 'react'
 import {NotebookPen} from 'lucide-react'
 import {UserRoundPen} from 'lucide-react'
 import {Link2} from 'lucide-react'
-import Dasboard2 from '../components/header/Dasboard2'
+
 import {Link} from 'react-router-dom'
-import Das from '../components/header/Das'
+
 
 const Edit_Profile = () => {
   return (
@@ -76,12 +76,8 @@ const Edit_Profile = () => {
 
         </div>
 
-        <Dasboard2/>
-
       </div>
     </div>
-
-    <Das/>
     
     </div>
   )
