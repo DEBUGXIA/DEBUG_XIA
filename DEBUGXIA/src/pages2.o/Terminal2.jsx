@@ -52,7 +52,7 @@ const Terminal2 = () => {
         <Terminal3/>
       </div>
 
-      <div className=' bg-gray-900 border-1 border-gray-500 rounded-xl p-5 mr-35 -mt-18 h-50 flex flex-col gap-3'>
+      <div className=' bg-gray-950 border-1 border-gray-500 rounded-xl p-5 mr-35 -mt-18 h-50 flex flex-col gap-3'>
         <div className=' flex flex-row  gap-3'>
           <div><SquareChevronRight color="#a6a6a6" strokeWidth={1.25} /></div>
           <div><h1>Terminal</h1></div>

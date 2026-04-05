@@ -5,14 +5,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import Home2 from '../pages2.o/Home2';
 
 
+
 const Get_Started = ({setIsAuth}) => {
 
-  const navigate = useNavigate();
-
-  const handleLogin = () => {
-    setIsAuth(true);        
-    navigate("/SingIn");     
-  };
+  
 
 const container = {
   hidden: {},
@@ -82,7 +78,7 @@ const item = {
         </motion.div>
 
         <motion.button
-        onClick={handleLogin}
+        
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.6 }}

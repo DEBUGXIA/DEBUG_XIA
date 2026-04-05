@@ -34,7 +34,7 @@ const Optimizer = () => {
       <div className=' flex flex-row items-start gap-10'>
 
         {Analyzer.map((item, idx) =>(
-          <div className=' flex flex-row items-start justify-between gap-5 bg-gray-900 w-55 h-25 py-1.5 px-4 border-1 border-gray-400 rounded-xl hover:border-blue-400 transition '>
+          <div className=' flex flex-row items-start justify-between gap-5 bg-gray-950 w-55 h-25 py-1.5 px-4 border-1 border-gray-400 rounded-xl hover:border-blue-400 transition '>
 
           <div key={idx} className=' flex flex-col items-start justify-between gap-2'>
           <div className=' flex flex-row items-center justify-between gap-3'>

@@ -15,7 +15,6 @@ import Not_Found from './pages/Not_Found'
 import Footer from './components/Footer'
 import Terms_and_con from './pages/Terms_and_con'
 import Privacy_Policy from './pages/Privacy_Policy'
-import Refund_Policy from './pages/Refund_Policy'
 import Home2 from './pages2.o/Home2'
 import Profile from './pages2.o/Profile'
 import Terminal2 from './pages2.o/Terminal2'
@@ -24,6 +23,7 @@ import Edit_Profile from './pages2.o/Edit_Profile'
 import Analysis_History from './pages2.o/Analysis_History'
 import Optimizer from './pages2.o/Optimizer'
 import Dashboard2 from './pages2.o/Dashboard2'
+import Footer2 from './components/Footer2'
 
 
 // Protected Route (only for Home2 now)
@@ -69,6 +69,8 @@ const isAfterLoginRoute = afterLoginRoutes.includes(location.pathname);
       ) : (
         <Navbar isAuth={isAuth} setIsAuth={setIsAuth} />
       )}
+
+      
 
       <Routes>
 
@@ -165,14 +167,18 @@ const isAfterLoginRoute = afterLoginRoutes.includes(location.pathname);
         {/*  POLICIES */}
         <Route path='/Terms_and_con' element={<Terms_and_con />} />
         <Route path='/Privacy_Policy' element={<Privacy_Policy />} />
-        <Route path='/Refund_Policy' element={<Refund_Policy />} />
+        
 
         {/*  NOT FOUND */}
         <Route path='*' element={<Not_Found />} />
 
       </Routes>
 
-      <Footer />
+      {isAuth && isAfterLoginRoute ? (
+        <Footer2 setIsAuth={setIsAuth} />
+      ) : (
+        <Footer isAuth={isAuth} setIsAuth={setIsAuth} />
+      )}
 
     </div>
   )

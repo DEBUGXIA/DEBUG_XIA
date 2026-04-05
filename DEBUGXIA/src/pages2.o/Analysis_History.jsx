@@ -88,7 +88,7 @@ const data = [
         {Analysis.map((item, idx) => (
           <div
             key={idx}
-            className='flex flex-row items-center gap-8 bg-gray-900 border border-gray-400 rounded-xl px-4 p-4 
+            className='flex flex-row items-center gap-8 bg-gray-950 border border-gray-400 rounded-xl px-4 p-4 
             hover:border-blue-500 hover:shadow-blue-500/20  
             transition-all duration-300 w-1/4'
           >
@@ -104,7 +104,7 @@ const data = [
       </div>
 
 
-      <div className='flex flex-col items-start gap-8 bg-gray-900 border border-gray-400 rounded-xl px-4 p-4 
+      <div className='flex flex-col items-start gap-8 bg-gray-950 border border-gray-400 rounded-xl px-4 p-4 
              hover:shadow-blue-500/20  
             transition-all duration-300  mr-20 px-10 py-5'>
 
@@ -118,7 +118,7 @@ const data = [
 
         
 
-        <div className='flex flex-col items-start gap-3 bg-gray-900 border border-gray-400 rounded-xl px-4 p-4 
+        <div className='flex flex-col items-start gap-3 bg-gray-950 border border-gray-400 rounded-xl px-4 p-4 
             hover:border-blue-500 transition-all duration-300 w-320'>
 
           <div className=' flex flex-row items-center justify-between gap-3'>
@@ -129,7 +129,7 @@ const data = [
 
           <div className=' flex flex-row items-start justify-between gap-1'>
             <div><CalendarDays color="#8a8a8a" strokeWidth={0.75} /></div>
-            <div><p className=' font-normal text-sm tracking-wide text-gray-600'>{item.time}</p></div>
+            <div><p className=' font-normal text-sm tracking-wide text-gray-400'>{item.time}</p></div>
           </div>
 
           <div className=' flex flex-row items-center justify-between gap-2 w-full'>
@@ -162,7 +162,7 @@ const data = [
       </div>
 
       <div className=' w-320 '>
-        <div className="bg-gray-900 border border-blue-900 rounded-xl p-6 w-full">
+        <div className="bg-gray-950 border border-blue-900 rounded-xl p-6 w-full">
       
      
       <div className=' flex flex-row items-start gap-1'>

@@ -4,9 +4,9 @@ import About from '../pages/About'
 import Logo from './header/Logo'
 import Icons from './icon/Icons'
 
-const Footer = () => {
+const Footer2 = () => {
   return (
-    <div className='rounded-2xl bg-white/5 backdrop-blur-xl h-60 shadow-2xl border-2 border-gray-800 text-blue-300 flex flex-row items-center justify-between px-10'>
+    <div className='rounded-2xl bg-white/5 backdrop-blur-xl h-70 shadow-2xl border-2 border-gray-800 text-blue-300 flex flex-row items-center justify-between px-10'>
       <div className=' flex flex-col items-center justify-between mt-5 mb-10'>
         <Logo/>
         <div className=' flex flex-col items-center justify-between gap-5'>
@@ -25,21 +25,23 @@ const Footer = () => {
             <h2>sanchariray71@gmail.com</h2>
             <h2>sikdarritisha@gmail.com</h2></div>
         </div>
-        <div className='mt-30 flex flex-col items-start justify-between gap-5'>
+        <div className='mt-40 flex flex-col items-start justify-between gap-5'>
           <div><h1 className='tracking-wide font-medium text-xl'>Quick Links</h1></div>
           <div className='flex flex-col items-start justify-between font-light text-lg text-white'>
             <Link to='/About'>About</Link>
-            <Link to='/Features'>Features</Link>
-            <Link to='/How_It_Works'>How It Works</Link>
-            <Link to='/Dashboard'>Download</Link>
+            <Link to='/Home2'>Code Analyzer</Link>
+            <Link to='/Terminal2'>Terminal</Link>
+            <Link to='/Optimizer'>Optimizer</Link>
+            <Link to='/Analysis_History'>Analysis History</Link>
+            <Link to='/Error_History'>Error History</Link>
           </div>
         </div>
-        <div className='mt-25 flex flex-col items-start justify-between gap-5'>
+        <div className='mt-15 flex flex-col items-start justify-between gap-5'>
           <div><h1 className='tracking-wide font-medium text-xl'>Legal</h1></div>
           <div className='flex flex-col items-start justify-between font-light text-lg text-white'>
             <Link to='Terms_and_con'>Terms & Conditions</Link>
             <Link to='/Privacy_Policy'>Privacy Policy</Link>
-        
+            
           </div>
         </div>
       </div>
@@ -48,4 +50,4 @@ const Footer = () => {
   )
 }
 
-export default Footer
+export default Footer2
