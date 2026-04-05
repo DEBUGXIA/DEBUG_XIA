@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from debugxia_api.users.models import User, UserProfile
+from debugxia_api.users.models import User, UserProfile, ErrorLog, CodeExecution, AnalysisHistory
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -65,3 +65,28 @@ class SignInSerializer(serializers.Serializer):
 
         data['user'] = user
         return data
+
+
+class ErrorLogSerializer(serializers.ModelSerializer):
+    """Serializer for ErrorLog model"""
+    class Meta:
+        model = ErrorLog
+        fields = ['id', 'error_type', 'error_message', 'severity', 'status', 
+                  'file_path', 'line_number', 'code_snippet', 'ai_suggestion', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'created_at', 'updated_at']
+
+
+class CodeExecutionSerializer(serializers.ModelSerializer):
+    """Serializer for CodeExecution model"""
+    class Meta:
+        model = CodeExecution
+        fields = ['id', 'language', 'code', 'output', 'execution_time', 'success', 'error', 'created_at']
+        read_only_fields = ['id', 'created_at', 'output', 'execution_time', 'success', 'error']
+
+
+class AnalysisHistorySerializer(serializers.ModelSerializer):
+    """Serializer for AnalysisHistory model"""
+    class Meta:
+        model = AnalysisHistory
+        fields = ['id', 'analysis_type', 'code', 'suggestions', 'score', 'improvements', 'created_at']
+        read_only_fields = ['id', 'created_at', 'suggestions', 'score', 'improvements']

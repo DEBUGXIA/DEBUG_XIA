@@ -1,184 +1,193 @@
 import React, { useState } from 'react'
 import { motion } from "framer-motion";
-import SingIn from './SingIn'
 import { Link, useNavigate } from 'react-router-dom';
-import Home2 from '../pages2.o/Home2';
-import { api } from '../api/config';
+import { authAPI } from '../services/api';
 
-
-const Get_Started = ({setIsAuth}) => {
-
+const Get_Started = ({ setIsAuth }) => {
   const navigate = useNavigate();
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [formData, setFormData] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    username: '',
+    password: '',
+    password_confirm: '',
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
   const handleSignup = async (e) => {
     e.preventDefault();
-    
-    if (!fullName || !email || !password || !passwordConfirm) {
-      setError('Please fill in all fields');
-      return;
-    }
-
-    if (password !== passwordConfirm) {
-      setError('Passwords do not match');
-      return;
-    }
-
     setLoading(true);
     setError('');
 
+    if (formData.password !== formData.password_confirm) {
+      setError('Passwords do not match');
+      setLoading(false);
+      return;
+    }
+
     try {
-      const response = await api.signup(fullName, email, password, passwordConfirm);
-      
-      if (response.access && response.refresh) {
-        // Save tokens to localStorage
-        localStorage.setItem('accessToken', response.access);
-        localStorage.setItem('refreshToken', response.refresh);
-        
-        setIsAuth(true);
-        navigate('/Home2');
-      } else {
-        setError(response.error || 'Signup failed');
-      }
+      await authAPI.signup(formData);
+      setIsAuth(true);
+      setTimeout(() => {
+        navigate("/Home2");
+      }, 800);
     } catch (err) {
-      setError('Signup error: ' + err.message);
+      setError(err.email?.[0] || err.detail || 'Signup failed. Please try again.');
+      console.error('Signup error:', err);
     } finally {
       setLoading(false);
     }
   };
 
-const container = {
-  hidden: {},
-  show: {
-    transition: {
-      staggerChildren: 0.2,
+  const container = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.2,
+      },
     },
-  },
-};
+  };
 
-const item = {
-  hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0 },
-};
+  const item = {
+    hidden: { opacity: 0, y: 30 },
+    show: { opacity: 1, y: 0 },
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center gap-20  bg-[#020617] overflow-hidden relative">
-
-      <div className='bg-blue flex items-center justify-center
-      font-semibold text-7xl font-serif gap-3'>
+    <div className="min-h-screen flex items-center justify-center gap-20 overflow-hidden">
+      <div className='bg-blue flex items-center justify-center font-semibold text-7xl font-serif gap-3'>
         <h1>
-  <motion.span
-    initial={{ opacity: 0, x: -50 }}
-    animate={{ opacity: 1, x: 0 }}
-    transition={{ duration: 0.8 }}
-    className="inline-block tracking-wide"
-  >
-    Welcome
-  </motion.span>
-</h1>
+          <motion.span
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="inline-block tracking-wide"
+          >
+            Welcome
+          </motion.span>
+        </h1>
       </div>
-
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-900 via-black to-cyan-900 opacity-30 animate-pulse" />
-
-      <motion.div
-        animate={{ y: [0, -40, 0] }}
-        transition={{ repeat: Infinity, duration: 6 }}
-        className="absolute w-[400px] h-[400px] bg-blue-500/20 blur-[120px] rounded-full top-[-100px] left-[-100px]"
-      />
-
-      <motion.div
-        animate={{ y: [0, 40, 0] }}
-        transition={{ repeat: Infinity, duration: 8 }}
-        className="absolute w-[400px] h-[400px] bg-cyan-400/20 blur-[120px] rounded-full bottom-[-100px] right-[-100px]"
-      />
 
       <motion.div
         initial={{ opacity: 0, scale: 0.7, x: 100 }}
         animate={{ opacity: 1, scale: 1, x: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="relative w-[360px] p-8 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl"
+        className=" w-[360px] p-8 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl"
       >
-        <h2 className="text-white text-2xl font-semibold text-center mb-6  tracking-wide">
+        <h2 className="text-white text-2xl font-semibold text-center mb-6 tracking-wide">
           Create Account
         </h2>
 
-        <motion.div variants={container} initial="hidden" animate="show" className="space-y-4">
+        <form onSubmit={handleSignup}>
+          <motion.div variants={container} initial="hidden" animate="show" className="space-y-4">
+            <motion.input
+              variants={item}
+              type="text"
+              name="first_name"
+              placeholder="First Name"
+              className="w-full px-4 py-3 bg-transparent border border-gray-600 rounded-lg text-white focus:border-blue-400 outline-none transition"
+              value={formData.first_name}
+              onChange={handleChange}
+            />
 
-          <motion.input
-            variants={item}
-            type="text"
-            placeholder="Full Name"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            className="w-full px-4 py-3 bg-transparent border border-gray-600 rounded-lg text-white focus:border-blue-400 outline-none transition"
-          />
+            <motion.input
+              variants={item}
+              type="text"
+              name="last_name"
+              placeholder="Last Name"
+              className="w-full px-4 py-3 bg-transparent border border-gray-600 rounded-lg text-white focus:border-blue-400 outline-none transition"
+              value={formData.last_name}
+              onChange={handleChange}
+            />
 
-          <motion.input
-            variants={item}
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-3 bg-transparent border border-gray-600 rounded-lg text-white focus:border-blue-400 outline-none transition"
-          />
+            <motion.input
+              variants={item}
+              type="text"
+              name="username"
+              placeholder="Username"
+              className="w-full px-4 py-3 bg-transparent border border-gray-600 rounded-lg text-white focus:border-blue-400 outline-none transition"
+              value={formData.username}
+              onChange={handleChange}
+              required
+            />
 
-          <motion.input
-            variants={item}
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-3 bg-transparent border border-gray-600 rounded-lg text-white focus:border-blue-400 outline-none transition"
-          />
+            <motion.input
+              variants={item}
+              type="email"
+              name="email"
+              placeholder="Email"
+              className="w-full px-4 py-3 bg-transparent border border-gray-600 rounded-lg text-white focus:border-blue-400 outline-none transition"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
 
-          <motion.input
-            variants={item}
-            type="password"
-            placeholder="Confirm Password"
-            value={passwordConfirm}
-            onChange={(e) => setPasswordConfirm(e.target.value)}
-            className="w-full px-4 py-3 bg-transparent border border-gray-600 rounded-lg text-white focus:border-blue-400 outline-none transition"
-          />
-        </motion.div>
+            <motion.input
+              variants={item}
+              type="password"
+              name="password"
+              placeholder="Password"
+              className="w-full px-4 py-3 bg-transparent border border-gray-600 rounded-lg text-white focus:border-blue-400 outline-none transition"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
 
-        {error && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-3 p-2 bg-red-500/20 border border-red-500 rounded text-red-400 text-sm text-center"
-          >
-            {error}
+            <motion.input
+              variants={item}
+              type="password"
+              name="password_confirm"
+              placeholder="Confirm Password"
+              className="w-full px-4 py-3 bg-transparent border border-gray-600 rounded-lg text-white focus:border-blue-400 outline-none transition"
+              value={formData.password_confirm}
+              onChange={handleChange}
+              required
+            />
           </motion.div>
-        )}
 
-        <motion.button
-          onClick={handleSignup}
-          disabled={loading}
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.6 }}
-          whileHover={{ scale: 1.07, boxShadow: "0px 0px 20px #3b82f6" }}
-          whileTap={{ scale: 0.95 }}
-          className="mt-6 w-full py-3 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-medium tracking-wide disabled:opacity-50"
-        >
-          {loading ? 'Creating Account...' : 'Sign Up'}
-        </motion.button>
+          {error && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-red-400 text-sm mt-3 text-center"
+            >
+              {error}
+            </motion.p>
+          )}
 
-        <p className="text-center text-gray-400 text-sm mt-4">
+          <motion.button
+            type="submit"
+            disabled={loading}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.6 }}
+            whileHover={{ scale: 1.07, boxShadow: "0px 0px 20px #3b82f6" }}
+            whileTap={{ scale: 0.95 }}
+            className="mt-6 w-full py-3 rounded-2xl bg-gradient-to-r from-blue-500 to-sky-300 text-white font-medium tracking-wide disabled:opacity-50"
+          >
+            {loading ? 'Creating Account...' : 'Sign Up'}
+          </motion.button>
+        </form>
+
+        <p className="text-center text-gray-300 text-sm mt-4">
           Already have an account?{" "}
           <span className="text-blue-400 cursor-pointer hover:underline">
-            <Link to='/SingIn'>Sing In</Link>
+            <Link to='/SingIn'>Sign In</Link>
           </span>
         </p>
       </motion.div>
     </div>
   );
-}
+};
 
-
-export default Get_Started
+export default Get_Started;

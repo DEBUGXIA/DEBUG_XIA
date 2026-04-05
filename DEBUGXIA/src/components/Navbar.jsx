@@ -5,7 +5,7 @@ import Sing_in_up from './header/Sing_in_up'
 
 const Navbar = () => {
   return (
-    <div className=' p-8 rounded-2xl bg-white/5 backdrop-blur-xl h-15 shadow-2xl text-blue-300 lg:flex items-center justify-between sticky top-0 w-[100%] aspect-[16/9]'>
+    <div className='p-4 md:px-8 bg-white/5 backdrop-blur-xl shadow-2xl text-blue-400 flex items-center justify-between sticky top-0 w-full z-50 h-18'>
         <Logo/>
         <Nev />
         <Sing_in_up/>

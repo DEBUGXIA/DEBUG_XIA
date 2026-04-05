@@ -22,9 +22,9 @@ const Home = () => {
             transition={{ duration: 0.8 }}
             className="inline-block tracking-wide"
           >
-            Your AI <span className='bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent'>Coding Teacher</span>
+            Your AI <span className='bg-gradient-to-r from-blue-500 to-sky-300-50 bg-clip-text text-transparent hover:text-sky-500 transition-all duration-300'>Coding Teacher</span>
           </motion.span></h1>
-        <p className='font-medium text-xl text-gray-500 tracking-wide'><motion.span
+        <p className='font-medium text-xl text-gray-300 tracking-wide'><motion.span
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -41,14 +41,14 @@ const Home = () => {
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="inline-block tracking-wide bg-gradient-to-r from-blue-500 to-cyan-400 text-xl font-semibold px-7 py-3 rounded-2xl"> <Link to='/Get_Started'>Connect With VS Code</Link> </motion.span></button>
+            className="inline-block tracking-wide bg-gradient-to-r from-blue-500 to-sky-300 text-xl font-semibold px-7 py-3 rounded-2xl"> <Link to='/Get_Started'>Connect With VS Code</Link> </motion.span></button>
         <button>
           <Link to='/Dashboard'>
           <motion.span
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="inline-block tracking-wide text-xl font-semibold px-7 py-3 rounded-2xl border-2 border-gray-800"
+            className="inline-block tracking-wide text-xl font-semibold px-7 py-3 rounded-2xl border-2 border-gray-300"
           > Download Extension </motion.span></Link></button>
 
       </div>
