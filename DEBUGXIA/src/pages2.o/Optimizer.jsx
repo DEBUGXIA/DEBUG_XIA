@@ -19,7 +19,7 @@ const Optimizer = () => {
         <div className=' flex flex-row items-center justify-between gap-3'>
           <div><Zap size={35} color="#5f7fdd" strokeWidth={1.25} /></div>
           <div>
-          <h1 className='bg-gradient-to-r from-blue-500 to-fuchsia-400 bg-clip-text text-transparent tracking-wide font-bold text-4xl'>Code Optimizer</h1>
+          <h1 className='bg-gradient-to-r from-blue-500 to-sky-200 bg-clip-text text-transparent tracking-wide font-bold text-4xl'>Code Optimizer</h1>
         </div>
         </div>
 

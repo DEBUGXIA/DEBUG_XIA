@@ -74,7 +74,7 @@ const SignIn = ({ setIsAuth }) => {
           transition={{ delay: 0.6 }}
           whileHover={{ scale: 1.07, boxShadow: "0px 0px 20px #3b82f6" }}
           whileTap={{ scale: 0.95 }}
-          className="mt-6 w-full py-3 rounded-2xl bg-gradient-to-r from-blue-500 to-fuchsia-400 text-white font-medium"
+          className="mt-6 w-full py-3 rounded-2xl bg-gradient-to-r from-blue-500 to-sky-300 text-white font-medium"
         >
           Sign In
         </motion.button>

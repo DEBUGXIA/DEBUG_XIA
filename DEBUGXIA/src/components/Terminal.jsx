@@ -28,7 +28,7 @@ const Terminal = () => {
     <div className='m-10 flex flex-row justify-between gap-10 text-gray-300 px-30 py-10'>
       <form className='flex-col w-1/2 gap-5 justify-between py-2' onSubmit={(e) =>{SubmitHandler(e)}} action="">
 
-         <div className='font-bold text-2xl tracking-wide py-3 mb-6'>Your Coding <span className='bg-gradient-to-r from-blue-500 to-fuchsia-400 bg-clip-text text-transparent text-3xl'>Terminal</span></div>
+         <div className='font-bold text-2xl tracking-wide py-3 mb-6'>Your Coding <span className='bg-gradient-to-r from-blue-500 to-sky-300 bg-clip-text text-transparent text-3xl'>Terminal</span></div>
 
          <div className='flex flex-col gap-5 justify-between border-gray-500 rounded-md'>
   
@@ -51,7 +51,7 @@ const Terminal = () => {
           <textarea placeholder='Your Code . . . ' name="" id=""className='bg-gray-950 px-5 py-2 font-semibold text-lg tracking-wide border-gray-500 rounded-lg border-2 h-60'value={details} onChange={(e) => {setDetails(e.target.value)}}></textarea>
   
           <div className='flex items-center justify-center '>
-            <button className=' text-white px-4 py-2 font-semibold text-lg tracking-wide rounded-2xl w-50 text-center bg-gradient-to-r from-blue-500 to-fuchsia-400 flex flex-row items-center justify-between'>
+            <button className=' text-white px-4 py-2 font-semibold text-lg tracking-wide rounded-2xl w-50 text-center bg-gradient-to-r from-blue-500 to-sky-300 flex flex-row items-center justify-between'>
               <div><Play strokeWidth={1.75} /></div>
               <div><h1>Analyze Code</h1></div>
             </button>
@@ -62,7 +62,7 @@ const Terminal = () => {
 
       <div className=' flex flex-wap flex-col justify-start p-2 w-1/2 h-150 gap-2'>
   
-        <div className='font-bold text-2xl tracking-wide mb-9'>Your Coding <span className='bg-gradient-to-r from-blue-500 to-fuchsia-400 bg-clip-text text-transparent text-3xl '>Teacher</span></div>
+        <div className='font-bold text-2xl tracking-wide mb-9'>Your Coding <span className='bg-gradient-to-r from-blue-500 to-sky-300 bg-clip-text text-transparent text-3xl '>Teacher</span></div>
   
         <div className='rounded-2xl  border-2 border-gray-500 w-full h-[54%] p-2 bg-gray-950'>
           <div className=''>

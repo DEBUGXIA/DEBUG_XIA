@@ -6,7 +6,7 @@ const Home2 = () => {
     <div className=' flex flex-col justify-between ml-20 mt-15 gap-5 '>
       <div className=' flex flex-col items-center justify-between gap-3 mt-3'>
         <div>
-          <h1 className=' bg-gradient-to-r from-blue-500 to-fuchsia-400 bg-clip-text text-transparent tracking-wide font-bold text-5xl'>Code Analyzer</h1>
+          <h1 className=' bg-gradient-to-r from-blue-600 to-sky-300 bg-clip-text text-transparent tracking-wide font-bold text-5xl'>Code Analyzer</h1>
         </div>
         <div>
           <p className='font-medium text-lg text-gray-200 text-shadow-sm tracking-wide mt-5'>

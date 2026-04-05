@@ -18,7 +18,7 @@ const Terminal2 = () => {
         <div className=' flex flex-row items-center justify-between gap-3'>
           <div><Terminal size={35} color="#5fa8ec" strokeWidth={1.75} /></div>
           <div>
-          <h1 className='bg-gradient-to-r from-blue-500 to-fuchsia-400 bg-clip-text text-transparent tracking-wide font-bold text-4xl'>Terminal & Code Execution</h1>
+          <h1 className='bg-gradient-to-r from-blue-600 to-sky-300 bg-clip-text text-transparent tracking-wide font-bold text-4xl'>Terminal & Code Execution</h1>
         </div>
         </div>
 

@@ -14,11 +14,11 @@ const History = () => {
   const [Click, setClick] = useState(false)
 
   return (
-    <div className=' flex flex-col justify-between mt-10 gap-8 w-full mr-20'>
+    <div className=' flex flex-col justify-between mt-18 gap-8 w-full mr-20'>
 
-        <div className=' flex flex-col items-center justify-between gap-2 mt-15'>
+        <div className=' flex flex-col items-center justify-between gap-2'>
             <div className=''>
-                <h1 className='bg-gradient-to-r from-blue-500 to-fuchsia-400 bg-clip-text text-transparent tracking-wide font-bold text-5xl'>Error History</h1>
+                <h1 className='bg-gradient-to-r from-blue-600 to-sky-300 bg-clip-text text-transparent tracking-wide font-bold text-5xl'>Error History</h1>
             </div>
             <div>
                 <p className='font-medium text-lg text-gray-300 tracking-wide mt-5'>Browse and manage your coding errors with AI insights.</p>

@@ -75,7 +75,7 @@ const data = [
     <div className='flex flex-col justify-between ml-10 mt-18 gap-10 w-screen px-10'>
 
       <div className='flex flex-col items-center gap-2'>
-        <h1 className='bg-gradient-to-r from-blue-500 to-fuchsia-400 bg-clip-text text-transparent font-bold text-5xl'>
+        <h1 className='bg-gradient-to-r from-blue-600 to-sky-300 bg-clip-text text-transparent font-bold text-5xl'>
           Analysis History
         </h1>
         <p className='font-medium text-lg text-gray-300 mt-5'>

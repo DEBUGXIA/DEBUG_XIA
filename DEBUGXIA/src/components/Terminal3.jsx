@@ -56,7 +56,7 @@ const Terminal3 = () => {
           <textarea placeholder='Your Code . . . ' name="" id=""className='bg-gray-950 px-5 py-2 font-semibold text-lg tracking-wide border-gray-700 rounded-md border-1 h-80'value={details} onChange={(e) => {setDetails(e.target.value)}}></textarea>
   
           <div className='flex flex-row items-center justify-between '>
-            <button className=' text-white px-4 py-2 font-semibold text-lg tracking-wide rounded-xl w-180 text-center bg-gradient-to-r from-blue-500 to-fuchsia-400 flex flex-row items-center justify-center'>
+            <button className=' text-white px-4 py-2 font-semibold text-lg tracking-wide rounded-xl w-180 text-center bg-gradient-to-r from-blue-500 to-sky-300 flex flex-row items-center justify-center'>
               <div><Play strokeWidth={1.75} /></div>
               <div><h1>Execute Code</h1></div>
             </button>

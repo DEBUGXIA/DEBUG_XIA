@@ -15,7 +15,7 @@ const Features = () => {
 
       <div className=' flex flex-col items-center justify-between gap-5 mt-30'>
         <div>
-          <h1 className='font-bold text-5xl tracking-normal'>Everything you need to <span className='bg-gradient-to-r from-blue-500 to-fuchsia-400 bg-clip-text text-transparent'>code smarter</span></h1>
+          <h1 className='font-bold text-5xl tracking-normal'>Everything you need to <span className='bg-gradient-to-r from-blue-500 to-sky-300 bg-clip-text text-transparent'>code smarter</span></h1>
         </div>
         <div>
           <p className='font-medium text-lg text-gray-300 tracking-wide'>A complete toolkit that transforms how you debug, learn, and improve as a<br></br><span className='px-65'>developer.</span></p>
