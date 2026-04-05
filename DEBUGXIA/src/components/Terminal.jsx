@@ -37,7 +37,7 @@ const Terminal = () => {
               <input type="text" placeholder='File Name' className='px-5 py-2 text-white font-semibold text-lg tracking-wide border-gray-300 border-2 rounded-md' value={title} onChange={(e) =>{setTitle(e.target.value)}}/>
             </div>
             <div className=' mr-5 w-1/2 flex items-center font-medium text-lg text-gray-300 tracking-wide'>
-            <label for="cars">Choose Your Language :</label>
+            <label htmlFor="cars">Choose Your Language :</label>
 
               <select name="cars" id="cars"  className=' text-white w-20'>
                 <option value="volvo" className=' bg-gray-900'>Python</option>

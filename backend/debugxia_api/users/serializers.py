@@ -25,16 +25,26 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 class SignUpSerializer(serializers.ModelSerializer):
     """Serializer for user registration"""
-    password = serializers.CharField(write_only=True, min_length=8)
-    password_confirm = serializers.CharField(write_only=True, min_length=8)
+    password = serializers.CharField(write_only=True,min_length=5)
+    password_confirm = serializers.CharField(write_only=True, min_length=5)
 
     class Meta:
         model = User
         fields = ['email', 'username', 'first_name', 'last_name', 'password', 'password_confirm']
 
+    def validate_email(self, value):
+        if User.objects.filter(email__iexact=value).exists():
+            raise serializers.ValidationError("Email is already registered.")
+        return value
+
+    def validate_username(self, value):
+        if User.objects.filter(username__iexact=value).exists():
+            raise serializers.ValidationError("Username is already taken.")
+        return value
+
     def validate(self, data):
         if data['password'] != data['password_confirm']:
-            raise serializers.ValidationError({"password": "Passwords must match."})
+            raise serializers.ValidationError({"password_confirm": "Passwords must match."})
         return data
 
     def create(self, validated_data):
@@ -48,20 +58,38 @@ class SignUpSerializer(serializers.ModelSerializer):
 
 class SignInSerializer(serializers.Serializer):
     """Serializer for user login"""
-    email = serializers.EmailField()
+    email = serializers.CharField()  # Accept email or username
     password = serializers.CharField(write_only=True)
 
     def validate(self, data):
-        email = data.get('email')
-        password = data.get('password')
+        email_or_username = data.get('email', '').strip()
+        password = data.get('password', '')
 
-        try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
-            raise serializers.ValidationError("Invalid credentials.")
+        if not email_or_username or not password:
+            raise serializers.ValidationError("Email/username and password are required.")
 
+        user = None
+        
+        # Try email first (case-insensitive)
+        if '@' in email_or_username:
+            try:
+                user = User.objects.get(email__iexact=email_or_username)
+            except User.DoesNotExist:
+                pass
+        
+        # If not found by email, try username
+        if not user:
+            try:
+                user = User.objects.get(username__iexact=email_or_username)
+            except User.DoesNotExist:
+                raise serializers.ValidationError("Invalid email/username or password.")
+
+        # Verify password
         if not user.check_password(password):
-            raise serializers.ValidationError("Invalid credentials.")
+            raise serializers.ValidationError("Invalid email/username or password.")
+
+        if not user.is_active:
+            raise serializers.ValidationError("This account is inactive.")
 
         data['user'] = user
         return data

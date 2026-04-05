@@ -42,7 +42,7 @@ const Terminal3 = () => {
               <input type="text" placeholder='File Name' className='px-5 py-2 text-white font-semibold text-lg tracking-wide border-gray-700 border-2 rounded-md hover: border-blue-400 transition w-90' value={title} onChange={(e) =>{setTitle(e.target.value)}}/>
             </div>
             <div className=' mr-5 w-1/2 flex items-center font-medium text-lg text-gray-300 tracking-wide'>
-            <label for="cars">Choose Your Language :</label>
+            <label htmlFor="cars">Choose Your Language :</label>
 
               <select name="cars" id="cars"  className='bg-gray-950 text-gray-300 w-20'>
                 <option value="volvo">Python</option>

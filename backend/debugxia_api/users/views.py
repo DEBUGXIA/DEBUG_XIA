@@ -2,6 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -31,34 +32,55 @@ class UserViewSet(viewsets.ModelViewSet):
         """
         User registration endpoint
         """
-        serializer = SignUpSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            refresh = RefreshToken.for_user(user)
+        try:
+            serializer = SignUpSerializer(data=request.data)
+            if serializer.is_valid():
+                user = serializer.save()
+                refresh = RefreshToken.for_user(user)
+                return Response({
+                    'user': UserSerializer(user).data,
+                    'refresh': str(refresh),
+                    'access': str(refresh.access_token),
+                    'message': 'User registered successfully'
+                }, status=status.HTTP_201_CREATED)
+            else:
+                return Response({
+                    'detail': 'Validation failed',
+                    'errors': serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
             return Response({
-                'user': UserSerializer(user).data,
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
-                'message': 'User registered successfully'
-            }, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                'detail': str(e),
+                'error': 'Server error during signup'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @action(detail=False, methods=['POST'], permission_classes=[AllowAny()])
     def signin(self, request):
         """
         User login endpoint
         """
-        serializer = SignInSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.validated_data['user']
-            refresh = RefreshToken.for_user(user)
+        try:
+            serializer = SignInSerializer(data=request.data)
+            if serializer.is_valid():
+                user = serializer.validated_data['user']
+                refresh = RefreshToken.for_user(user)
+                return Response({
+                    'user': UserSerializer(user).data,
+                    'refresh': str(refresh),
+                    'access': str(refresh.access_token),
+                    'message': 'Login successful'
+                }, status=status.HTTP_200_OK)
+            else:
+                # Return validation errors with proper format
+                return Response({
+                    'detail': list(serializer.errors.values())[0][0] if serializer.errors else 'Invalid credentials',
+                    'errors': serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
             return Response({
-                'user': UserSerializer(user).data,
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
-                'message': 'Login successful'
-            }, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                'detail': str(e),
+                'error': 'Server error during login'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @action(detail=False, methods=['GET'], permission_classes=[IsAuthenticated()])
     def me(self, request):
@@ -88,32 +110,145 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserProfileViewSet(viewsets.ModelViewSet):
+class UserProfileView(APIView):
     """
-    ViewSet for UserProfile model
+    Simple API view for user profile management
     """
-    queryset = UserProfile.objects.all()
-    serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        return UserProfile.objects.filter(user=self.request.user)
-
-    def retrieve(self, request, *args, **kwargs):
+    def get(self, request):
         """Get current user's profile"""
-        profile = UserProfile.objects.get(user=request.user)
-        serializer = self.get_serializer(profile)
-        return Response(serializer.data)
+        try:
+            print(f"[GET] /profiles/me/ called for user: {request.user}")
+            
+            # Get existing profile or create one
+            try:
+                profile = UserProfile.objects.get(user=request.user)
+                print(f"[GET] Found existing profile: {profile.id}")
+            except UserProfile.DoesNotExist:
+                print(f"[GET] Creating new profile for user: {request.user}")
+                profile = UserProfile.objects.create(user=request.user)
+            
+            # Return profile data
+            data = {
+                'id': profile.id,
+                'company': profile.company,
+                'location': profile.location,
+                'website': profile.website,
+                'user': {
+                    'id': request.user.id,
+                    'username': request.user.username,
+                    'email': request.user.email,
+                    'first_name': request.user.first_name,
+                    'last_name': request.user.last_name,
+                    'bio': request.user.bio,
+                    'phone_number': request.user.phone_number,
+                }
+            }
+            
+            print(f"[GET] Returning profile data: {data}")
+            return Response(data, status=status.HTTP_200_OK)
+            
+        except Exception as e:
+            import traceback
+            print(f"[ERROR] GET /profiles/me/: {str(e)}")
+            print(traceback.format_exc())
+            return Response(
+                {'detail': f'Error: {str(e)}'}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
-    @action(detail=False, methods=['PUT'])
-    def update_my_profile(self, request):
-        """Update current user's profile"""
-        profile = UserProfile.objects.get(user=request.user)
-        serializer = UserProfileSerializer(profile, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request):
+        """Update current user's profile - PUT"""
+        return self.update_profile(request)
+
+    def patch(self, request):
+        """Update current user's profile - PATCH"""
+        return self.update_profile(request)
+
+    def update_profile(self, request):
+        """Helper method to update profile - NO SERIALIZERS"""
+        try:
+            print(f"[UPDATE] Called with data: {request.data}")
+            
+            # Get or create profile
+            try:
+                profile = UserProfile.objects.get(user=request.user)
+                print(f"[UPDATE] Found existing profile: {profile.id}")
+            except UserProfile.DoesNotExist:
+                print(f"[UPDATE] Creating new profile")
+                profile = UserProfile.objects.create(user=request.user)
+            
+            # Update User model fields directly (NO SERIALIZER)
+            if 'bio' in request.data:
+                request.user.bio = request.data['bio']
+                print(f"[UPDATE] Setting bio: {request.data['bio']}")
+            
+            if 'phone_number' in request.data:
+                request.user.phone_number = request.data['phone_number']
+                print(f"[UPDATE] Setting phone_number: {request.data['phone_number']}")
+            
+            if 'first_name' in request.data:
+                request.user.first_name = request.data['first_name']
+                print(f"[UPDATE] Setting first_name: {request.data['first_name']}")
+            
+            if 'last_name' in request.data:
+                request.user.last_name = request.data['last_name']
+                print(f"[UPDATE] Setting last_name: {request.data['last_name']}")
+            
+            if 'email' in request.data:
+                request.user.email = request.data['email']
+                print(f"[UPDATE] Setting email: {request.data['email']}")
+            
+            # Save user
+            request.user.save()
+            print(f"[UPDATE] User saved successfully")
+            
+            # Update UserProfile fields directly (NO SERIALIZER)
+            if 'company' in request.data:
+                profile.company = request.data['company']
+                print(f"[UPDATE] Setting company: {request.data['company']}")
+            
+            if 'location' in request.data:
+                profile.location = request.data['location']
+                print(f"[UPDATE] Setting location: {request.data['location']}")
+            
+            if 'website' in request.data:
+                profile.website = request.data['website']
+                print(f"[UPDATE] Setting website: {request.data['website']}")
+            
+            # Save profile
+            profile.save()
+            print(f"[UPDATE] Profile saved successfully")
+            
+            # Return updated data
+            data = {
+                'id': profile.id,
+                'company': profile.company,
+                'location': profile.location,
+                'website': profile.website,
+                'user': {
+                    'id': request.user.id,
+                    'username': request.user.username,
+                    'email': request.user.email,
+                    'first_name': request.user.first_name,
+                    'last_name': request.user.last_name,
+                    'bio': request.user.bio,
+                    'phone_number': request.user.phone_number,
+                }
+            }
+            
+            print(f"[UPDATE] Returning updated data: {data}")
+            return Response(data, status=status.HTTP_200_OK)
+            
+        except Exception as e:
+            import traceback
+            print(f"[ERROR] UPDATE /profiles/me/: {str(e)}")
+            print(traceback.format_exc())
+            return Response(
+                {'detail': f'Error: {str(e)}'}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 
 class ErrorLogViewSet(viewsets.ModelViewSet):

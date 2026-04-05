@@ -16,15 +16,33 @@ const SignIn = ({ setIsAuth }) => {
     setError('');
 
     try {
-      await authAPI.signin(email, password);
+      console.log('🔐 Starting signin with:', email);
+      const result = await authAPI.signin(email, password);
+      console.log('✓ Signin successful');
+      console.log('✓ Access token:', result.access?.substring(0, 20) + '...');
+      console.log('✓ Token in localStorage:', localStorage.getItem('access_token')?.substring(0, 20) + '...');
+      
+      // Wait a bit to ensure token is set, then navigate
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      console.log('✓ Setting isAuth to true and navigating...');
       setIsAuth(true);
-      setTimeout(() => {
-        navigate("/Home2");
-      }, 800);
+      
+      navigate("/Home2", { replace: true });
     } catch (err) {
-      setError(err.detail || 'Invalid email or password');
-      console.error('Login error:', err);
-    } finally {
+      console.error('❌ Signin failed:', err);
+      // Handle various error formats
+      if (err.detail) {
+        setError(err.detail);
+      } else if (err.email) {
+        setError(err.email);
+      } else if (err.password) {
+        setError(err.password);
+      } else if (typeof err === 'string') {
+        setError(err);
+      } else {
+        setError('Invalid email or password');
+      }
       setLoading(false);
     }
   };

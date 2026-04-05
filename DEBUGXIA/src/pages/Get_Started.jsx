@@ -35,6 +35,18 @@ const Get_Started = ({ setIsAuth }) => {
       return;
     }
 
+    if (formData.password.length < 5) {
+      setError('Password must be at least 5 characters long');
+      setLoading(false);
+      return;
+    }
+
+    if (!formData.email || !formData.username) {
+      setError('Email and username are required');
+      setLoading(false);
+      return;
+    }
+
     try {
       await authAPI.signup(formData);
       setIsAuth(true);
@@ -42,7 +54,15 @@ const Get_Started = ({ setIsAuth }) => {
         navigate("/Home2");
       }, 800);
     } catch (err) {
-      setError(err.email?.[0] || err.detail || 'Signup failed. Please try again.');
+      // Handle various error formats
+      if (err.errors) {
+        const firstError = Object.values(err.errors)[0];
+        setError(Array.isArray(firstError) ? firstError[0] : firstError);
+      } else if (err.detail) {
+        setError(err.detail);
+      } else {
+        setError('Signup failed. Please try again.');
+      }
       console.error('Signup error:', err);
     } finally {
       setLoading(false);

@@ -100,6 +100,9 @@ STATIC_URL = '/static/'
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Authentication
+AUTH_USER_MODEL = 'users.User'
+
 # REST Framework configuration
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -116,8 +119,20 @@ REST_FRAMEWORK = {
 }
 
 # CORS configuration
-CORS_ALLOWED_ORIGINS = config('FRONTEND_URL', default='http://localhost:5173').split(',')
+FRONTEND_URLS = config('FRONTEND_URL', default='http://localhost:5173,http://localhost:5174')
+CORS_ALLOWED_ORIGINS = [url.strip() for url in FRONTEND_URLS.split(',')]
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
 
 # JWT settings
 from datetime import timedelta
