@@ -1,26 +1,52 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from debugxia_api.users.models import User, UserProfile, ErrorLog, CodeExecution, AnalysisHistory
+from debugxia_api.users.models import User, UserProfile, ErrorLog, CodeExecution, AnalysisHistory, LoginHistory
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """Serializer for User model"""
+    """Serializer for User model with comprehensive user information"""
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 
-                  'phone_number', 'profile_image', 'bio', 'is_email_verified', 'created_at']
-        read_only_fields = ['id', 'created_at', 'is_email_verified']
+        fields = [
+            'id', 'username', 'email', 'first_name', 'last_name', 
+            'phone_number', 'profile_image', 'bio', 'date_of_birth', 'gender',
+            'is_email_verified', 'is_active_account', 'account_verified_at',
+            'notification_email', 'notification_sms', 
+            'created_at', 'updated_at', 'last_login_date', 'last_login_ip'
+        ]
+        read_only_fields = ['id', 'created_at', 'updated_at', 'is_email_verified', 'last_login_date', 'last_login_ip']
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    """Serializer for UserProfile model"""
+    """Serializer for UserProfile model with comprehensive profile data"""
     user = UserSerializer(read_only=True)
 
     class Meta:
         model = UserProfile
-        fields = ['id', 'user', 'company', 'location', 'website', 
-                  'last_login_ip', 'last_login_timestamp']
-        read_only_fields = ['id', 'last_login_ip', 'last_login_timestamp']
+        fields = [
+            'id', 'user', 'company', 'job_title', 'industry', 'years_of_experience',
+            'location', 'country', 'city', 'timezone',
+            'website', 'github_url', 'linkedin_url', 'twitter_url', 'portfolio_url',
+            'skills', 'languages', 'interests',
+            'profile_completion_percentage', 'profile_visibility',
+            'created_at', 'updated_at'
+        ]
+        read_only_fields = ['id', 'created_at', 'updated_at']
+
+
+class LoginHistorySerializer(serializers.ModelSerializer):
+    """Serializer for LoginHistory model"""
+    user_email = serializers.CharField(source='user.email', read_only=True)
+    
+    class Meta:
+        model = LoginHistory
+        fields = [
+            'id', 'user', 'user_email', 'status', 'ip_address', 
+            'user_agent', 'device_type', 'browser', 'os', 'location',
+            'failed_reason', 'login_timestamp', 'logout_timestamp', 'session_duration'
+        ]
+        read_only_fields = ['id', 'login_timestamp']
+
 
 
 class SignUpSerializer(serializers.ModelSerializer):

@@ -6,8 +6,9 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
+from django.conf import settings
 
-from debugxia_api.users.models import User, UserProfile, ErrorLog, CodeExecution, AnalysisHistory
+from debugxia_api.users.models import User, UserProfile, ErrorLog, CodeExecution, AnalysisHistory, LoginHistory
 from debugxia_api.users.serializers import (
     UserSerializer, UserProfileSerializer, SignUpSerializer, SignInSerializer,
     ErrorLogSerializer, CodeExecutionSerializer, AnalysisHistorySerializer
@@ -87,8 +88,22 @@ class UserViewSet(viewsets.ModelViewSet):
         """
         Get current user information
         """
-        serializer = UserSerializer(request.user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        user = request.user
+        data = UserSerializer(user).data
+        
+        # CRITICAL: Convert profile_image to full URL if it's relative
+        if data.get('profile_image'):
+            profile_image = data['profile_image']
+            # If it's a relative path (starts with /), convert to absolute URL
+            if isinstance(profile_image, str) and profile_image.startswith('/'):
+                data['profile_image'] = request.build_absolute_uri(profile_image)
+            elif isinstance(profile_image, str) and not profile_image.startswith('http'):
+                # If it's a relative path without leading slash, add /media/ and make absolute
+                data['profile_image'] = request.build_absolute_uri(f'/media/{profile_image}')
+            
+            print(f'[ME] profile_image URL converted to: {data["profile_image"]}')
+        
+        return Response(data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['POST'], permission_classes=[IsAuthenticated()])
     def logout(self, request):
@@ -130,6 +145,13 @@ class UserProfileView(APIView):
                 profile = UserProfile.objects.create(user=request.user)
             
             # Return profile data
+            profile_image_url = None
+            if request.user.profile_image:
+                # Build full absolute URL for the image
+                relative_url = request.user.profile_image.url
+                profile_image_url = request.build_absolute_uri(relative_url)
+                print(f"[GET] Profile image URL: {profile_image_url}")
+            
             data = {
                 'id': profile.id,
                 'company': profile.company,
@@ -143,6 +165,7 @@ class UserProfileView(APIView):
                     'last_name': request.user.last_name,
                     'bio': request.user.bio,
                     'phone_number': request.user.phone_number,
+                    'profile_image': profile_image_url,
                 }
             }
             
@@ -170,6 +193,9 @@ class UserProfileView(APIView):
         """Helper method to update profile - NO SERIALIZERS"""
         try:
             print(f"[UPDATE] Called with data: {request.data}")
+            print(f"[UPDATE] Files: {request.FILES}")
+            print(f"[UPDATE] FILES keys: {list(request.FILES.keys())}")
+            print(f"[UPDATE] DATA keys: {list(request.data.keys())}")
             
             # Get or create profile
             try:
@@ -200,9 +226,69 @@ class UserProfileView(APIView):
                 request.user.email = request.data['email']
                 print(f"[UPDATE] Setting email: {request.data['email']}")
             
+            # Handle profile image upload - MANUALLY SAVE THE FILE
+            if 'profile_image' in request.FILES:
+                import os
+                from django.core.files.base import ContentFile
+                import uuid
+                
+                file_obj = request.FILES['profile_image']
+                print(f"[UPDATE] ✅ Profile image file received!")
+                print(f"[UPDATE]    - Filename: {file_obj.name}")
+                print(f"[UPDATE]    - Size: {file_obj.size} bytes")
+                print(f"[UPDATE]    - Content Type: {file_obj.content_type}")
+                
+                # Read file content
+                file_content = file_obj.read()
+                print(f"[UPDATE]    - Read {len(file_content)} bytes from file")
+                
+                # Generate unique filename to avoid conflicts
+                ext = os.path.splitext(file_obj.name)[1]  # Get file extension
+                filename = f"profile_{request.user.id}_{uuid.uuid4().hex[:8]}{ext}"
+                print(f"[UPDATE]    - Generated filename: {filename}")
+                
+                # Create the full file path
+                media_dir = os.path.join(settings.MEDIA_ROOT, 'user_profiles')
+                os.makedirs(media_dir, exist_ok=True)
+                full_path = os.path.join(media_dir, filename)
+                print(f"[UPDATE]    - Full file path: {full_path}")
+                
+                # Write file to disk
+                try:
+                    with open(full_path, 'wb') as f:
+                        f.write(file_content)
+                    print(f"[UPDATE]    ✅ File written to disk successfully!")
+                    print(f"[UPDATE]    - File size on disk: {os.path.getsize(full_path)} bytes")
+                    
+                    # Update model with relative path (for Django media)
+                    relative_path = f'user_profiles/{filename}'
+                    request.user.profile_image = relative_path
+                    print(f"[UPDATE]    - Model field set to: {relative_path}")
+                except Exception as e:
+                    print(f"[UPDATE]    ❌ ERROR writing file: {str(e)}")
+                    raise
+            else:
+                print(f"[UPDATE] ℹ️ No profile_image in request.FILES")
+            
             # Save user
             request.user.save()
-            print(f"[UPDATE] User saved successfully")
+            print(f"[UPDATE] ✅ User saved to database")
+            print(f"[UPDATE]    - profile_image field value: {request.user.profile_image}")
+            
+            # Verify file was saved to disk
+            if request.user.profile_image:
+                import os
+                file_path = os.path.join(settings.MEDIA_ROOT, str(request.user.profile_image))
+                print(f"[UPDATE] 📁 Verifying file on disk:")
+                print(f"[UPDATE]    - Expected path: {file_path}")
+                print(f"[UPDATE]    - File exists: {os.path.exists(file_path)}")
+                if os.path.exists(file_path):
+                    size = os.path.getsize(file_path)
+                    print(f"[UPDATE]    - File size: {size} bytes ✅")
+                else:
+                    print(f"[UPDATE]    - ⚠️ FILE NOT FOUND ON DISK!")
+            else:
+                print(f"[UPDATE] ⚠️ profile_image is None after save")
             
             # Update UserProfile fields directly (NO SERIALIZER)
             if 'company' in request.data:
@@ -222,6 +308,12 @@ class UserProfileView(APIView):
             print(f"[UPDATE] Profile saved successfully")
             
             # Return updated data
+            profile_image_url = None
+            if request.user.profile_image:
+                # Build full absolute URL for the image
+                relative_url = request.user.profile_image.url
+                profile_image_url = request.build_absolute_uri(relative_url)
+                print(f"[UPDATE] Profile image URL: {profile_image_url}")
             data = {
                 'id': profile.id,
                 'company': profile.company,
@@ -235,6 +327,7 @@ class UserProfileView(APIView):
                     'last_name': request.user.last_name,
                     'bio': request.user.bio,
                     'phone_number': request.user.phone_number,
+                    'profile_image': profile_image_url,
                 }
             }
             

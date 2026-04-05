@@ -7,6 +7,7 @@ import { authAPI } from "../../services/api";
 const Profileh = () => {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
   const dropdownRef = useRef();
 
   useEffect(() => {
@@ -17,24 +18,80 @@ const Profileh = () => {
     };
     document.addEventListener("mousedown", handler);
     
-    // Fetch user data
+    // Fetch user data immediately on mount - no delays!
+    console.log('🚀 Profileh (navbar) mounted - fetching fresh user data immediately...')
     fetchUserData();
     
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
+  // Refetch profile data when page becomes visible
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        console.log('🔄 Navbar profile: Page became visible, refreshing...')
+        setRefreshTrigger(prev => prev + 1)
+        fetchUserData()
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
+  }, [])
+
+  // Refetch when window gains focus
+  useEffect(() => {
+    const handleFocus = () => {
+      console.log('🔄 Navbar: Window focused, refreshing profile...')
+      setRefreshTrigger(prev => prev + 1)
+      fetchUserData()
+    }
+    window.addEventListener('focus', handleFocus)
+    return () => window.removeEventListener('focus', handleFocus)
+  }, [])
+
+  // Listen for profile update signals from localStorage
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === 'profileUpdated') {
+        console.log('🔄 Navbar: Profile update detected, refreshing...')
+        setRefreshTrigger(prev => prev + 1)
+        fetchUserData()
+      }
+    }
+    
+    window.addEventListener('storage', handleStorageChange)
+    
+    // Also check localStorage periodically for same-tab updates
+    const interval = setInterval(() => {
+      const profileUpdate = localStorage.getItem('profileUpdated')
+      if (profileUpdate) {
+        console.log('🔄 Navbar: Profile update detected via polling, refreshing...')
+        setRefreshTrigger(prev => prev + 1)
+        fetchUserData()
+      }
+    }, 500)
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+      clearInterval(interval)
+    }
+  }, [])
+
   const fetchUserData = async () => {
     try {
       const token = localStorage.getItem('access_token');
       if (!token) {
-        console.warn('No access token found');
+        console.warn('⚠️ No access token found in navbar');
         return;
       }
+      console.log('📡 Navbar: Fetching current user...')
       const userData = await authAPI.getCurrentUser();
+      console.log('✅ Navbar: User data received:', userData)
+      console.log('   - Username:', userData.username)
+      console.log('   - Profile image:', userData.profile_image)
       setUser(userData);
     } catch (error) {
-      console.error('Error fetching user:', error);
-      // If token is invalid, clear it
+      console.error('❌ Navbar: Error fetching user:', error);
       if (error.code === 'user_not_found' || error.detail === 'User not found') {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
@@ -42,14 +99,34 @@ const Profileh = () => {
     }
   };
 
+  // Helper: Convert relative image paths to absolute URLs
+  const getAbsoluteImageUrl = (imageUrl) => {
+    if (!imageUrl) return null
+    if (imageUrl.startsWith('http')) return imageUrl  // Already absolute
+    if (imageUrl.startsWith('/media/')) return `http://localhost:8000${imageUrl}`  // Already has /media/
+    if (imageUrl.startsWith('user_profiles/')) return `http://localhost:8000/media/${imageUrl}`  // Add /media/
+    return `http://localhost:8000/media/${imageUrl}`  // Fallback
+  }
+
   const fullName = user ? `${user.first_name} ${user.last_name}`.trim() || user.username : 'User';
   const email = user?.email || '';
+  // Add cache-busting query parameter to force fresh image load with refresh trigger
+  const timestamp = Date.now() + refreshTrigger
+  const profileImageUrl = user?.profile_image ? `${getAbsoluteImageUrl(user.profile_image)}?t=${timestamp}` : null
 
   return (
     <div className="relative" ref={dropdownRef}>
       
   
-      <img src="/public/User.jpeg" alt="profile" onClick={() => setOpen(!open)}  className="w-10 h-10 rounded-full cursor-pointer border-2 border-white/20 hover:scale-105 transition mr-20"/>
+      {profileImageUrl ? (
+        <img src={profileImageUrl} alt="profile" onClick={() => setOpen(!open)} className="w-10 h-10 rounded-full cursor-pointer border-2 border-white/20 hover:scale-105 transition mr-20" onError={(e) => {
+          console.error('❌ Profile image failed to load:', profileImageUrl)
+        }}/>
+      ) : (
+        <div className="w-10 h-10 rounded-full cursor-pointer border-2 border-white/20 hover:scale-105 transition mr-20 bg-gray-700 flex items-center justify-center text-xs text-gray-400" onClick={() => setOpen(!open)}>
+          ?
+        </div>
+      )}
 
   
       {open && (

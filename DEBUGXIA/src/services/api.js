@@ -30,6 +30,8 @@ apiClient.interceptors.request.use(
     console.log(`[INTERCEPTOR] ${config.method.toUpperCase()} ${config.url}`, {
       hasToken: !!token,
       tokenPreview: token ? token.substring(0, 20) + '...' : 'NONE',
+      dataType: config.data?.constructor?.name,
+      isFormData: config.data instanceof FormData,
     });
     
     if (token) {
@@ -38,6 +40,23 @@ apiClient.interceptors.request.use(
     } else {
       console.warn(`[INTERCEPTOR] ⚠ No token found for authenticated request`);
     }
+    
+    // CRITICAL: When sending FormData, let axios set Content-Type automatically
+    // Axios will set multipart/form-data with proper boundary
+    if (config.data instanceof FormData) {
+      console.log('[INTERCEPTOR] 📦 FormData detected - removing Content-Type header to let axios set it');
+      delete config.headers['Content-Type'];
+      
+      console.log('[INTERCEPTOR] FormData entries:');
+      for (let [key, value] of config.data) {
+        if (value instanceof File) {
+          console.log(`  - ${key}: File(${value.name}, ${value.size} bytes, ${value.type})`);
+        } else {
+          console.log(`  - ${key}: ${value}`);
+        }
+      }
+    }
+    
     return config;
   },
   (error) => {
@@ -149,8 +168,10 @@ export const authAPI = {
         apiClient.defaults.headers.Authorization = `Bearer ${token}`;
       }
       
-      const response = await apiClient.get('/users/me/');
-      console.log('[API] getCurrentUser successful');
+      // Add cache-busting query parameter instead of headers to avoid CORS issues
+      const cacheBuster = `?t=${Date.now()}`;
+      const response = await apiClient.get(`/users/me/${cacheBuster}`);
+      console.log('[API] getCurrentUser successful:', response.data);
       return response.data;
     } catch (error) {
       console.error('[API] getCurrentUser error:', error.response?.status, error.response?.data || error);
@@ -175,8 +196,11 @@ export const authAPI = {
 export const profileAPI = {
   getProfile: async () => {
     try {
-      const response = await apiClient.get('/profiles/me/');
+      // Add cache-busting query parameter instead of headers
+      const cacheBuster = `?t=${Date.now()}`;
+      const response = await apiClient.get(`/profiles/me/${cacheBuster}`);
       console.log('[API] Got profile:', response.data);
+      console.log('   - Profile image URL:', response.data?.user?.profile_image);
       return response.data;
     } catch (error) {
       console.error('[API] getProfile error:', error.response?.data || error);
@@ -184,14 +208,27 @@ export const profileAPI = {
     }
   },
 
-  updateMyProfile: async (data) => {
+  updateMyProfile: async (data, isFormData = false) => {
     try {
-      console.log('[API] Updating profile:', data);
+      console.log('[API] Updating profile:', isFormData ? 'FormData with image' : 'JSON data');
+      console.log('[API] isFormData param:', isFormData);
+      console.log('[API] data is FormData:', data instanceof FormData);
+      
+      // Send the data - let axios handle it
+      // If it's FormData, the interceptor will remove Content-Type
+      // and let axios set multipart/form-data with boundary
       const response = await apiClient.put('/profiles/me/', data);
-      console.log('[API] Profile updated successfully');
+      
+      console.log('[API] ✅ Profile updated successfully');
+      console.log('[API] Response status:', response.status);
+      
+      if (response.data.user) {
+        console.log('[API] User profile_image:', response.data.user.profile_image);
+      }
+      
       return response.data;
     } catch (error) {
-      console.error('[API] Error updating profile:', error.response?.data || error);
+      console.error('[API] ❌ Error updating profile:', error.response?.status, error.response?.data || error);
       throw error.response?.data || error;
     }
   },
