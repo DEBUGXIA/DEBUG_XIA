@@ -6,7 +6,7 @@ import Icons from './icon/Icons'
 
 const Footer = () => {
   return (
-    <div className='rounded-2xl bg-white/5 backdrop-blur-xl h-60 shadow-2xl border-2 border-gray-800 text-blue-300 mt-20 flex flex-row items-center justify-between px-10'>
+    <div className='rounded-2xl bg-white/5 backdrop-blur-xl h-60 shadow-2xl border-2 border-gray-800 text-blue-300 flex flex-row items-center justify-between px-10'>
       <div className=' flex flex-col items-center justify-between mt-5 mb-10'>
         <Logo/>
         <div className=' flex flex-col items-center justify-between gap-5'>

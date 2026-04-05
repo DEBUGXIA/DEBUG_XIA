@@ -11,15 +11,15 @@ const Optimizer = () => {
     { Title: "Est. Performance Gain", Num: "2.5x"},
   ]
   return (
-    <div className=' flex flex-col justify-between ml-20 mt-10 gap-8 '>
+    <div className=' flex flex-col justify-between ml-20 mt-18 gap-8 '>
 
       
-      <div className=' flex flex-col items-start justify-between gap-3 mt-3 ml-5'>
+      <div className=' flex flex-col items-start justify-between gap-3 ml-5'>
 
         <div className=' flex flex-row items-center justify-between gap-3'>
           <div><Zap size={35} color="#5f7fdd" strokeWidth={1.25} /></div>
           <div>
-          <h1 className='text-white text-shadow-lg  tracking-wide font-bold text-4xl'>Code Optimizer</h1>
+          <h1 className='bg-gradient-to-r from-blue-500 to-fuchsia-400 bg-clip-text text-transparent tracking-wide font-bold text-4xl'>Code Optimizer</h1>
         </div>
         </div>
 

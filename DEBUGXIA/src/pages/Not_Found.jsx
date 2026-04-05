@@ -8,14 +8,14 @@ const Not_Found = () => {
 
       <img src="https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif" alt="" className='w-800 h-180'/>
       <div className='flex flex-col items-center justify-between'>
-        <div className='absolute top-25 font-serif font-medium text-6xl tracking-wider '>
+        <div className=' top-25 font-serif font-medium text-6xl tracking-wider '>
           <h1>404</h1>
         </div>
-        <div className='absolute top-155 flex gap-2 flex-col'>
+        <div className=' top-155 flex gap-2 flex-col'>
           <h2 className='font-serif tracking-wide font-bold text-4xl'>Look like you're lost</h2>
           <p className='font-serif tracking-wide font-medium text-lg px-8'>the page you are looking for not avaible!</p>
         </div>
-        <div className='absolute top-175'>
+        <div className=' top-175'>
           <button className='bg-green-600 py-1.5 px-4 border-white border-2 rounded-3xl text-white font-semibold text-lg'>
             <Link to='/'>Go To Home</Link>
           </button>

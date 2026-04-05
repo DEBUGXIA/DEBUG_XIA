@@ -10,15 +10,15 @@ const Terminal2 = () => {
     {Logo: <CodeXml color="#5fa8ec" strokeWidth={1.25} />, Title: "Avg Time", Num: "0.86s"},
   ]
   return (
-    <div className=' flex flex-col justify-between ml-20 mt-15 gap-8 '>
+    <div className=' flex flex-col justify-between ml-20 mt-18 gap-8 '>
 
       
-      <div className=' flex flex-col items-start justify-between gap-3 mt-3 ml-5'>
+      <div className=' flex flex-col items-start justify-between gap-3 ml-5'>
 
         <div className=' flex flex-row items-center justify-between gap-3'>
           <div><Terminal size={35} color="#5fa8ec" strokeWidth={1.75} /></div>
           <div>
-          <h1 className='text-white text-shadow-lg tracking-wide font-bold text-4xl'>Terminal & Code Execution</h1>
+          <h1 className='bg-gradient-to-r from-blue-500 to-fuchsia-400 bg-clip-text text-transparent tracking-wide font-bold text-4xl'>Terminal & Code Execution</h1>
         </div>
         </div>
 
@@ -33,14 +33,14 @@ const Terminal2 = () => {
       <div className=' flex flex-row items-center gap-10 mt-5'>
 
         {Analyzer.map((item, idx) =>(
-          <div className=' flex flex-row items-center justify-between gap-5 bg-gray-900 w-35 h-25 py-1.5 px-4 border-1 border-gray-400 rounded-xl hover:border-blue-400 transition'>
+          <div className=' flex flex-row items-center justify-between gap-5 bg-gray-950 w-35 h-25 py-1.5 px-4 border-1 border-gray-400 rounded-xl hover:border-blue-400 transition'>
 
           <div key={idx} className=' flex flex-col items-start justify-between gap-2'>
           <div className=' flex flex-row items-center justify-between gap-3'>
             <div>{item.Logo}</div>
-            <div><h1 className=' font-medium text-sm text-gray-400 tracking-wide '>{item.Title}</h1></div>
+            <div><h1 className=' font-medium text-sm text-gray-300 tracking-wide '>{item.Title}</h1></div>
           </div>
-          <div><h1 className='font-medium text-2xl text-gray-400 tracking-wide'>{item.Num}</h1></div>
+          <div><h1 className='font-medium text-2xl text-gray-300 tracking-wide'>{item.Num}</h1></div>
         </div>
 
         </div>
