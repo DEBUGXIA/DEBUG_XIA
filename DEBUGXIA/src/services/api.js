@@ -11,6 +11,28 @@ const apiClient = axios.create({
   },
 });
 
+// ==================== AUTO-LOGOUT HANDLER ====================
+// This will be called when server is unreachable or during logout
+let onAutoLogout = null;
+
+// Register callback for auto-logout
+export const setAutoLogoutCallback = (callback) => {
+  onAutoLogout = callback;
+  console.log('[API] Auto-logout callback registered');
+};
+
+// Execute auto-logout
+const executeAutoLogout = () => {
+  localStorage.removeItem('access_token');
+  localStorage.removeItem('refresh_token');
+  delete apiClient.defaults.headers.Authorization;
+  
+  if (onAutoLogout) {
+    console.log('[API] ⚠️ Server unreachable - executing auto-logout');
+    onAutoLogout();
+  }
+};
+
 // Initialize token from localStorage on app start
 const initializeToken = () => {
   const token = localStorage.getItem('access_token');
@@ -65,13 +87,24 @@ apiClient.interceptors.request.use(
   }
 );
 
-// Handle token refresh on 401
+// Handle token refresh on 401 and server connectivity
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
     
     console.log('[RESPONSE] Error status:', error.response?.status, 'URL:', originalRequest?.url);
+    
+    // Handle server connectivity issues (network errors, connection refused, etc.)
+    if (!error.response) {
+      // Network error - server is likely down or unreachable
+      console.error('[RESPONSE] ❌ SERVER UNREACHABLE - Network Error:', error.message);
+      executeAutoLogout();
+      return Promise.reject({
+        message: 'Server is unreachable. Please check your connection.',
+        isServerDown: true
+      });
+    }
     
     if (error.response?.status === 401 && !originalRequest._retry) {
       console.log('[RESPONSE] Got 401, attempting token refresh...');
@@ -97,9 +130,8 @@ apiClient.interceptors.response.use(
         }
       } catch (refreshError) {
         console.error('[RESPONSE] Token refresh failed:', refreshError.response?.status, refreshError.response?.data);
-        // Only clear tokens if refresh truly failed
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
+        // Refresh failed - execute auto-logout
+        executeAutoLogout();
       }
     }
     
@@ -153,6 +185,7 @@ export const authAPI = {
   },
 
   logout: () => {
+    console.log('[API] Logging out...');
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     delete apiClient.defaults.headers.Authorization;
@@ -304,6 +337,57 @@ export const analysisAPI = {
       throw error.response?.data || error;
     }
   },
+};
+
+// ==================== SERVER HEALTH CHECK ====================
+export const checkServerHealth = async () => {
+  try {
+    // Try to reach a simple endpoint that requires no auth
+    const response = await axios.get('http://localhost:8000/api/users/me/', {
+      timeout: 5000 // 5 second timeout
+    });
+    console.log('[HEALTH] ✓ Server is reachable');
+    return true;
+  } catch (error) {
+    if (error.message === 'Network Error' || !error.response) {
+      console.error('[HEALTH] ❌ Server is unreachable - Network Error');
+      executeAutoLogout();
+      return false;
+    }
+    // Other HTTP errors might still mean server is up (just auth issues)
+    console.log('[HEALTH] Server responded with status:', error.response?.status);
+    return true;
+  }
+};
+
+// Start periodic health check (every 30 seconds)
+let healthCheckInterval = null;
+
+export const startHealthCheck = (interval = 30000) => {
+  if (healthCheckInterval) {
+    console.log('[HEALTH] Health check already running');
+    return;
+  }
+  
+  console.log('[HEALTH] Starting health check every', interval / 1000, 'seconds');
+  healthCheckInterval = setInterval(() => {
+    checkServerHealth().catch(err => {
+      console.error('[HEALTH] Health check error:', err);
+    });
+  }, interval);
+  
+  // Initial check
+  checkServerHealth().catch(err => {
+    console.error('[HEALTH] Initial health check error:', err);
+  });
+};
+
+export const stopHealthCheck = () => {
+  if (healthCheckInterval) {
+    console.log('[HEALTH] Stopping health check');
+    clearInterval(healthCheckInterval);
+    healthCheckInterval = null;
+  }
 };
 
 export default apiClient;
