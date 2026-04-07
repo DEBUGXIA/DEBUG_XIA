@@ -2,7 +2,6 @@ import React from 'react'
 import{Link} from 'react-router-dom'
 import Home from '../../pages2.o/Home2'
 import Terminal2 from '../../pages2.o/Terminal2'
-import Analysis_History from '../../pages2.o/Analysis_History'
 import Optimizer from '../../pages2.o/Optimizer'
 
 
@@ -12,7 +11,6 @@ const Nev2 = () => {
       <Link to='/Home2'>Code Analyzer</Link>
       <Link to='/Terminal2'>Terminal</Link>
       <Link to='/Optimizer'>Optimizer</Link>
-      <Link to='/Analysis_History'>Analysis History</Link>
     </div>
   )
 }

@@ -28,6 +28,11 @@ const Terminal3 = () => {
         // Load stats from API on mount
         useEffect(() => {
           fetchStats()
+          // Restore analysis results from localStorage
+          const savedAnalysis = localStorage.getItem('terminal3_analysisOutput')
+          if (savedAnalysis) {
+            setAnalysisOutput(savedAnalysis)
+          }
         }, [])
 
         const fetchStats = async () => {
@@ -106,6 +111,13 @@ const Terminal3 = () => {
           // Stats are persistent in database, do NOT clear them
           // Just reload from database to ensure they're accurate
           fetchStats()
+        }
+
+        // Helper function to save analysis output
+        const saveAnalysis = (analysisText) => {
+          setAnalysisOutput(analysisText)
+          // Save to localStorage to persist across tab switches
+          localStorage.setItem('terminal3_analysisOutput', analysisText)
         }
 
         const getAverageTime = () => {
@@ -214,6 +226,8 @@ const Terminal3 = () => {
                 }])
                 setHasError(true)
                 updateStats(false, executionTime)
+                // Dispatch event for real-time dashboard update
+                window.dispatchEvent(new CustomEvent('errorOccurred'))
               } else {
                 const data = await response.json()
                 
@@ -224,6 +238,8 @@ const Terminal3 = () => {
                   }])
                   setHasError(false)
                   updateStats(true, executionTime)
+                  // Dispatch event for real-time dashboard update
+                  window.dispatchEvent(new CustomEvent('codeExecuted'))
                 } else {
                   const outputs = []
                   if (data.output) {
@@ -244,6 +260,8 @@ const Terminal3 = () => {
                   }])
                   setHasError(true)
                   updateStats(false, executionTime)
+                  // Dispatch event for real-time dashboard update
+                  window.dispatchEvent(new CustomEvent('errorOccurred'))
                 }
               }
             } catch (err) {
@@ -255,6 +273,8 @@ const Terminal3 = () => {
               }])
               setHasError(true)
               updateStats(false, executionTime)
+              // Dispatch event for real-time dashboard update
+              window.dispatchEvent(new CustomEvent('errorOccurred'))
             } finally {
               setLoading(false)
             }
@@ -270,33 +290,39 @@ const Terminal3 = () => {
             
             try {
               const errorContent = terminalOutput.find(o => o.type === 'error')?.content || ''
+              const fileName = file.length > 0 ? file[0].name : 'code.py'
+              const token = localStorage.getItem('access_token') || localStorage.getItem('token')
               
               const response = await fetch('http://localhost:8000/api/analyze-execution/', {
                 method: 'POST',
                 headers: {
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  ...(token && { 'Authorization': `Bearer ${token}` })
                 },
                 body: JSON.stringify({
                   code: details,
                   language: language,
                   output: '',
-                  error: errorContent
+                  error: errorContent,
+                  file_name: fileName,
+                  analysis_type: 'quality'
                 })
               })
               
               if (!response.ok) {
                 const errorData = await response.json()
-                setAnalysisOutput('Error: ' + (errorData.error || 'Failed to analyze'))
+                saveAnalysis('Error: ' + (errorData.error || 'Failed to analyze'))
               } else {
                 const data = await response.json()
                 if (data.success) {
-                  setAnalysisOutput(data.analysis)
+                  saveAnalysis(data.analysis)
+                  window.dispatchEvent(new CustomEvent('analysisCompleted'))
                 } else {
-                  setAnalysisOutput('Error: ' + data.analysis)
+                  saveAnalysis('Error: ' + data.analysis)
                 }
               }
             } catch (err) {
-              setAnalysisOutput('Error: ' + err.message)
+              saveAnalysis('Error: ' + err.message)
             } finally {
               setAnalysisLoading(false)
             }
@@ -314,33 +340,39 @@ const Terminal3 = () => {
             try {
               const output = terminalOutput.find(o => o.type === 'output')?.content || ''
               const error = terminalOutput.find(o => o.type === 'error')?.content || ''
+              const fileName = file.length > 0 ? file[0].name : 'code.py'
+              const token = localStorage.getItem('access_token') || localStorage.getItem('token')
               
               const response = await fetch('http://localhost:8000/api/analyze-execution/', {
                 method: 'POST',
                 headers: {
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  ...(token && { 'Authorization': `Bearer ${token}` })
                 },
                 body: JSON.stringify({
                   code: details,
                   language: language,
                   output: output,
-                  error: error
+                  error: error,
+                  file_name: fileName,
+                  analysis_type: 'quality'
                 })
               })
               
               if (!response.ok) {
                 const errorData = await response.json()
-                setAnalysisOutput('Error: ' + (errorData.error || 'Failed to analyze'))
+                saveAnalysis('Error: ' + (errorData.error || 'Failed to analyze'))
               } else {
                 const data = await response.json()
                 if (data.success) {
-                  setAnalysisOutput(data.analysis)
+                  saveAnalysis(data.analysis)
+                  window.dispatchEvent(new CustomEvent('analysisCompleted'))
                 } else {
-                  setAnalysisOutput('Error: ' + data.analysis)
+                  saveAnalysis('Error: ' + data.analysis)
                 }
               }
             } catch (err) {
-              setAnalysisOutput('Error: ' + err.message)
+              saveAnalysis('Error: ' + err.message)
             } finally {
               setAnalysisLoading(false)
             }
@@ -424,6 +456,8 @@ const Terminal3 = () => {
                 setTerminalOutput([])
                 setHasError(false)
                 setAnalysisOutput('')
+                // Clear analysis from localStorage
+                localStorage.removeItem('terminal3_analysisOutput')
                 // Reset session stats when code is cleared
                 setSessionExecutions(0)
                 setSessionSuccessful(0)

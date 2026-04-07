@@ -27,7 +27,6 @@ const Optimizer = () => {
     { Title: "Total Suggestions", Num: optimizationStats.total_suggestions.toString()},
     { Title: "Avg Improvement", Num: Math.round(optimizationStats.avg_improvement) + "%"},
     { Title: "Critical Issues", Num: optimizationStats.critical_issues.toString()},
-    { Title: "Est. Performance Gain", Num: optimizationStats.performance_gain.toFixed(2) + "x"},
   ]
   return (
     <div className=' flex flex-col justify-between ml-20 mt-18 gap-8 '>

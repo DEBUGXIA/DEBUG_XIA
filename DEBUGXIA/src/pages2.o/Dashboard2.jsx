@@ -22,6 +22,34 @@ const Dashboard2 = () => {
 
   useEffect(() => {
     fetchDashboardData()
+    
+    // Listen for error events from Terminal/Code Analyzer
+    const handleErrorOccurred = () => {
+      console.log('Error occurred, refreshing dashboard...')
+      fetchDashboardData()
+    }
+    
+    // Listen for code execution completion
+    const handleCodeExecuted = () => {
+      console.log('Code executed, refreshing dashboard...')
+      fetchDashboardData()
+    }
+    
+    // Add event listeners
+    window.addEventListener('errorOccurred', handleErrorOccurred)
+    window.addEventListener('codeExecuted', handleCodeExecuted)
+    
+    // Auto-refresh every 3 seconds for real-time updates
+    const refreshInterval = setInterval(() => {
+      fetchDashboardData()
+    }, 3000)
+    
+    // Cleanup listeners and interval on unmount
+    return () => {
+      window.removeEventListener('errorOccurred', handleErrorOccurred)
+      window.removeEventListener('codeExecuted', handleCodeExecuted)
+      clearInterval(refreshInterval)
+    }
   }, [])
 
   const fetchDashboardData = async () => {

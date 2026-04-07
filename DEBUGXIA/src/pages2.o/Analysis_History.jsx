@@ -5,11 +5,17 @@ import { FileText } from 'lucide-react'
 import { CalendarDays } from 'lucide-react'
 import { CodeXml } from 'lucide-react'
 import { BadgeAlert } from 'lucide-react'
+import { Play, CircleCheckBig } from 'lucide-react'
 
 
 const Analysis_History = () => {
 
   const [analysisData, setAnalysisData] = useState([])
+  const [executionStats, setExecutionStats] = useState({
+    total_executions: 0,
+    average_execution_time: 0,
+    success_rate: 0
+  })
   const [loading, setLoading] = useState(true)
   const [Analysis, setAnalysis] = useState([
     { Title: "Total Analyses", Num: "0", Logo: <Zap color="#b335ed" strokeWidth={1.25} /> },
@@ -18,9 +24,109 @@ const Analysis_History = () => {
     { Title: "Time Saved", Num: "0m", Logo: <CalendarDays color="#69f781" strokeWidth={1.25} /> },
   ])
 
+  const [TerminalStats, setTerminalStats] = useState([
+    { Title: "Executions Today", Num: "0", Logo: <Play color="#5fa8ec" strokeWidth={1.25} /> },
+    { Title: "Success Rate", Num: "0%", Logo: <CircleCheckBig color="#5fa8ec" strokeWidth={1.25} /> },
+    { Title: "Avg Time", Num: "0s", Logo: <CodeXml color="#5fa8ec" strokeWidth={1.25} /> },
+  ])
+
   useEffect(() => {
-    fetchAnalysisHistory()
+    fetchAllData()
+    
+    // Listen for stats updates from Terminal
+    const handleStatsUpdated = () => {
+      console.log('Stats updated, refreshing...')
+      fetchAllData()
+    }
+    
+    // Listen for optimization updates from Optimizer
+    const handleOptimizationUpdated = () => {
+      console.log('Optimization updated, refreshing...')
+      fetchAllData()
+    }
+    
+    // Listen for analysis completion
+    const handleAnalysisCompleted = () => {
+      console.log('Analysis completed, refreshing...')
+      fetchAllData()
+    }
+    
+    // Add event listeners
+    window.addEventListener('statsUpdated', handleStatsUpdated)
+    window.addEventListener('optimizationUpdated', handleOptimizationUpdated)
+    window.addEventListener('analysisCompleted', handleAnalysisCompleted)
+    
+    // Periodic refresh every 5 seconds to catch updates
+    const refreshInterval = setInterval(() => {
+      fetchAllData()
+    }, 5000)
+    
+    // Cleanup listeners and interval on unmount
+    return () => {
+      window.removeEventListener('statsUpdated', handleStatsUpdated)
+      window.removeEventListener('optimizationUpdated', handleOptimizationUpdated)
+      window.removeEventListener('analysisCompleted', handleAnalysisCompleted)
+      clearInterval(refreshInterval)
+    }
   }, [])
+
+  const fetchAllData = async () => {
+    setLoading(true)
+    try {
+      const token = localStorage.getItem('access_token') || localStorage.getItem('token')
+      if (!token) {
+        console.log('Not logged in')
+        setLoading(false)
+        return
+      }
+
+      // Fetch analysis history
+      const analysisResponse = await fetch('http://localhost:8000/api/analysis/', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+
+      if (analysisResponse.ok) {
+        const analysisResult = await analysisResponse.json()
+        const results = analysisResult.results || analysisResult || []
+        setAnalysisData(results)
+        calculateStats(results)
+      }
+
+      // Fetch execution stats
+      const execResponse = await fetch('http://localhost:8000/api/execution-stats/', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+
+      if (execResponse.ok) {
+        const execData = await execResponse.json()
+        if (execData.success && execData.stats) {
+          setExecutionStats(execData.stats)
+          updateTerminalStats(execData.stats)
+        }
+      }
+    } catch (err) {
+      console.log('Could not fetch data:', err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const updateTerminalStats = (stats) => {
+    const newTerminalStats = [
+      { Title: "Executions Today", Num: stats.total_executions?.toString() || "0", Logo: <Play color="#5fa8ec" strokeWidth={1.25} /> },
+      { Title: "Success Rate", Num: Math.round(stats.success_rate || 0) + "%", Logo: <CircleCheckBig color="#5fa8ec" strokeWidth={1.25} /> },
+      { Title: "Avg Time", Num: (stats.average_execution_time || 0).toFixed(2) + "s", Logo: <CodeXml color="#5fa8ec" strokeWidth={1.25} /> },
+    ]
+    setTerminalStats(newTerminalStats)
+  }
 
   const fetchAnalysisHistory = async () => {
     setLoading(true)
@@ -95,8 +201,11 @@ const Analysis_History = () => {
   const formatData = (analyses) => {
     return analyses.map(analysis => {
       const improvements = analysis.improvements || {}
+      const fileName = analysis.file_name || analysis.analysis_type === 'optimization' ? 'Optimization.py' : 'Code.ts'
+      const language = analysis.language || 'Unknown'
       return {
-        file: analysis.analysis_type === 'optimization' ? 'Optimization.py' : 'Code.ts',
+        file: fileName,
+        language: language,
         type: analysis.analysis_type.charAt(0).toUpperCase() + analysis.analysis_type.slice(1),
         time: formatDate(analysis.created_at),
         error: Math.round((100 - analysis.score) * 0.5),
@@ -121,30 +230,11 @@ const Analysis_History = () => {
         </p>
       </div>
 
-      <div className='flex flex-row items-center justify-between gap-15 mr-20  px-5 bg-green mt-20 '>
-
-        {Analysis.map((item, idx) => (
-          <div
-            key={idx}
-            className='flex flex-row items-center gap-8 bg-gray-950 border border-gray-400 rounded-xl px-4 p-4 
-            hover:border-blue-500 hover:shadow-blue-500/20  
-            transition-all duration-300 w-1/4'
-          >
-            <div>{item.Logo}</div>
-
-            <div className='flex flex-col'>
-              <h3 className='text-gray-300 text-sm tracking-wide'>{item.Title}</h3>
-              <h1 className='text-white text-2xl font-semibold tracking-wide'>{item.Num}</h1>
-            </div>
-          </div>
-        ))}
-
-      </div>
-
-
-      <div className='flex flex-col items-start gap-8 bg-gray-950 border border-gray-400 rounded-xl px-4 p-4 
+      {/* Recent Analyses Section - Only show if data exists */}
+      {Data.length > 0 && (
+        <div className='flex flex-col items-start gap-8 bg-gray-950 border border-gray-400 rounded-xl px-10 py-5 
              hover:shadow-blue-500/20  
-            transition-all duration-300  mr-20 px-10 py-5'>
+            transition-all duration-300  mr-20'>
 
               <div className=' flex flex-col items-center justify-between gap-5'>
                 <h1 className=' font-bold text-xl tracking-wide'>Recent Analyses</h1>
@@ -154,52 +244,73 @@ const Analysis_History = () => {
                 <div className='text-center text-gray-300 py-8 w-full'>
                   <p>Loading analyses...</p>
                 </div>
-              ) : Data.length === 0 ? (
-                <div className='text-center text-gray-300 py-8 w-full'>
-                  <p>No analyses yet. Start by executing code and analyzing it!</p>
-                </div>
               ) : (
-                <>{Data.map((item,idx)=>(
-                  <div key={idx} className='flex flex-col items-start gap-3 bg-gray-950 border border-gray-400 rounded-xl px-4 p-4 
-                      hover:border-blue-500 transition-all duration-300 w-320'>
+                <div className='w-full grid grid-cols-1 gap-6'>
+                  {Data.map((item,idx)=>(
+                    <div key={idx} className='flex flex-col gap-4 bg-gradient-to-br from-gray-900 to-gray-950 border border-gray-700 rounded-xl px-6 py-5 
+                        hover:border-blue-400 hover:shadow-lg hover:shadow-blue-500/10 transition-all duration-300'>
 
-                    <div className=' flex flex-row items-center justify-between gap-3'>
-                      <div><CodeXml color="#607ceb" strokeWidth={1} /></div>
-                      <div><h3 className=' font-bold text-lg tracking-wide text-gray-300'>{item.file}</h3></div>
-                      <div><p className='font-normal text-sm tracking-wide text-gray-400 bg-gray-800 border-0 rounded-lg px-2.5 py-1'>{item.type}</p></div>
-                    </div>
-
-                    <div className=' flex flex-row items-start justify-between gap-1'>
-                      <div><CalendarDays color="#8a8a8a" strokeWidth={0.75} /></div>
-                      <div><p className=' font-normal text-sm tracking-wide text-gray-400'>{item.time}</p></div>
-                    </div>
-
-                    <div className=' flex flex-row items-center justify-between gap-2 w-full'>
-                      <div className=' flex flex-col items-center justify-between gap-0.5 bg-red-950 border-0 rounded-xl w-1/3'>
-                        <div><h1 className=' font-medium text-lg text-red-300'>Error</h1></div>
-                        <div><h1 className=' font-bold text-xl text-red-300'>{item.error}%</h1></div>
+                      {/* File Header Section */}
+                      <div className='flex flex-row items-center justify-between gap-4 pb-4 border-b border-gray-700'>
+                        <div className='flex flex-row items-center gap-3 flex-1'>
+                          <CodeXml color="#607ceb" strokeWidth={1.5} size={24} />
+                          <div className='flex flex-col gap-1'>
+                            <h3 className='font-bold text-lg text-white tracking-wide'>{item.file}</h3>
+                            <p className='text-xs text-gray-400 tracking-wide uppercase'>{item.language} • {item.type}</p>
+                          </div>
+                        </div>
+                        <div className='flex items-center gap-2'>
+                          <CalendarDays color="#8a8a8a" strokeWidth={0.75} size={16} />
+                          <p className='text-sm text-gray-400'>{item.time}</p>
+                        </div>
                       </div>
 
-                      <div className=' flex flex-col items-center justify-between gap-1 bg-blue-950 border-0 rounded-xl w-1/3'>
-                        <div><h1 className=' font-medium text-lg text-blue-300'>Quality</h1></div>
-                        <div><h1 className=' font-bold text-xl text-blue-300'>{item.quality}%</h1></div>
+                      {/* Stats Grid Section */}
+                      <div className='grid grid-cols-3 gap-4'>
+                        <div className='flex flex-col items-center justify-center gap-2 bg-red-950/30 border border-red-800/50 rounded-lg py-4 px-3 
+                            hover:bg-red-950/50 transition-colors'>
+                          <h1 className='font-medium text-sm text-red-300 uppercase tracking-wide'>Error Rate</h1>
+                          <h1 className='font-bold text-2xl text-red-400'>{item.error}%</h1>
+                        </div>
+
+                        <div className='flex flex-col items-center justify-center gap-2 bg-blue-950/30 border border-blue-800/50 rounded-lg py-4 px-3
+                            hover:bg-blue-950/50 transition-colors'>
+                          <h1 className='font-medium text-sm text-blue-300 uppercase tracking-wide'>Quality</h1>
+                          <h1 className='font-bold text-2xl text-blue-400'>{item.quality}%</h1>
+                        </div>
+
+                        <div className='flex flex-col items-center justify-center gap-2 bg-green-950/30 border border-green-800/50 rounded-lg py-4 px-3
+                            hover:bg-green-950/50 transition-colors'>
+                          <h1 className='font-medium text-sm text-green-300 uppercase tracking-wide'>Optimization</h1>
+                          <h1 className='font-bold text-2xl text-green-400'>{item.success}%</h1>
+                        </div>
                       </div>
 
-                      <div className=' flex flex-col items-center justify-between gap-1 bg-green-950 border-0 rounded-xl w-1/3'>
-                        <div><h1 className=' font-medium text-lg text-green-300'>Optimization</h1></div>
-                        <div><h1 className=' font-bold text-xl text-green-300'>{item.success}%</h1></div>
-                      </div>
-                    </div>
+                      {/* Issues Section */}
+                      {item.issues > 0 && (
+                        <div className='flex flex-row items-center gap-3 bg-purple-950/20 border border-purple-800/30 rounded-lg px-4 py-3'>
+                          <BadgeAlert color="#c05fec" strokeWidth={1.5} size={20} />
+                          <p className='text-sm text-purple-300'><span className='font-semibold'>{item.issues}</span> issues found and documented</p>
+                        </div>
+                      )}
 
-                    <div className=' flex flex-row items-center justify-between gap-1'>
-                      <div><BadgeAlert color="#c05fec" strokeWidth={0.75} /></div>
-                      <div><h1 className='font-normal text-sm tracking-wide text-purple-400'>{item.issues} issues found</h1></div>
                     </div>
-
-                  </div>
-                ))}</>
+                  ))}
+                </div>
               )}
-      </div>
+        </div>
+      )}
+
+      {/* Empty State - Show helpful CTA when no analyses */}
+      {!loading && Data.length === 0 && (
+        <div className='flex flex-col items-center justify-center gap-6 bg-gradient-to-b from-blue-950/20 to-gray-950 border-2 border-dashed border-blue-500/50 rounded-xl px-10 py-16 mr-20'>
+          <CodeXml color="#5fa8ec" size={48} strokeWidth={1} />
+          <div className='flex flex-col items-center gap-3'>
+            <h2 className='font-bold text-2xl text-white text-center'>No Analyses Yet</h2>
+            <p className='text-gray-400 text-center max-w-md'>Start by uploading a code file in the <span className='text-blue-400 font-semibold'>Code Analyzer</span> or <span className='text-blue-400 font-semibold'>Terminal</span> tab and analyze it to see results here.</p>
+          </div>
+        </div>
+      )}
 
     </div>
   )

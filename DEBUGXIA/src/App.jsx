@@ -20,7 +20,6 @@ import Profile from './pages2.o/Profile'
 import Terminal2 from './pages2.o/Terminal2'
 import Error_History from './pages2.o/Error_History'
 import Edit_Profile from './pages2.o/Edit_Profile'
-import Analysis_History from './pages2.o/Analysis_History'
 import Optimizer from './pages2.o/Optimizer'
 import Dashboard2 from './pages2.o/Dashboard2'
 import Footer2 from './components/Footer2'
@@ -91,7 +90,6 @@ const App = () => {
   "/Terminal2",
   "/Error_History",
   "/Edit_Profile",
-  "/Analysis_History",
   "/Optimizer",
   "/Dashboard2"
 ];
@@ -172,15 +170,6 @@ if (loading) {
           element={
             <ProtectedRoute isAuth={isAuth}>
               <Error_History/>
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path='/Analysis_History'
-          element={
-            <ProtectedRoute isAuth={isAuth}>
-              <Analysis_History/>
             </ProtectedRoute>
           }
         />

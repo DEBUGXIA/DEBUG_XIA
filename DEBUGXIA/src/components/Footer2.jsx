@@ -32,7 +32,6 @@ const Footer2 = () => {
             <Link to='/Home2'>Code Analyzer</Link>
             <Link to='/Terminal2'>Terminal</Link>
             <Link to='/Optimizer'>Optimizer</Link>
-            <Link to='/Analysis_History'>Analysis History</Link>
           </div>
         </div>
         <div className='mt-15 flex flex-col items-start justify-between gap-5'>

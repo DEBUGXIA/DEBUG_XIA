@@ -91,7 +91,9 @@ const Terminal4 = () => {
             code: codeContext,
             language: language,
             output: levelPrefix,
-            error: ''
+            error: '',
+            file_name: title || 'code',
+            analysis_type: 'optimization'
           })
         })
 
@@ -134,6 +136,9 @@ const Terminal4 = () => {
 
             // Dispatch event to update Optimizer page
             window.dispatchEvent(new CustomEvent('optimizationUpdated', { detail: newStats }))
+            
+            // Dispatch event to update Analysis History page in real-time
+            window.dispatchEvent(new CustomEvent('analysisCompleted'))
 
             // Add to suggestions display only on first generation
             if (!efficiencyLevel) {

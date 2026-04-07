@@ -217,6 +217,8 @@ class AnalysisHistory(models.Model):
     
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='analysis_history')
     analysis_type = models.CharField(max_length=50, choices=ANALYSIS_TYPE_CHOICES)
+    file_name = models.CharField(max_length=255, blank=True, null=True)  # Track uploaded file name
+    language = models.CharField(max_length=50, blank=True, null=True)  # Programming language
     code = models.TextField()
     suggestions = models.TextField()
     score = models.FloatField(default=0.0)

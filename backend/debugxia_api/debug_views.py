@@ -67,7 +67,7 @@ Provide a comprehensive analysis."""
                 'prompt': prompt,
                 'stream': False
             },
-            timeout=300
+            timeout=600
         )
         
         if response.status_code != 200:
@@ -307,11 +307,15 @@ To see AI-powered analysis, run: ollama serve"""
 def analyze_execution(request):
     """Analyze code execution output/error using Mistral"""
     try:
+        from debugxia_api.users.models import AnalysisHistory
+        
         data = request.data
         code = data.get('code', '')
         language = data.get('language', 'unknown')
         output = data.get('output', '')
         error = data.get('error', '')
+        file_name = data.get('file_name', '')
+        analysis_type = data.get('analysis_type', 'quality')
         
         if not code:
             return JsonResponse({'error': 'No code provided'}, status=400)
@@ -354,7 +358,7 @@ Be helpful, clear, and concise."""
                 'prompt': prompt,
                 'stream': False
             },
-            timeout=300
+            timeout=600
         )
         
         if response.status_code != 200:
@@ -365,6 +369,29 @@ Be helpful, clear, and concise."""
         
         result = response.json()
         analysis = result['response']
+        
+        # Save to analysis history if user is authenticated
+        if request.user.is_authenticated:
+            try:
+                # Calculate a basic quality score (0-100)
+                quality_score = 75  # Default score
+                if error:
+                    quality_score = 40  # Lower score for errors
+                elif output:
+                    quality_score = 80  # Higher score for successful execution
+                
+                AnalysisHistory.objects.create(
+                    user=request.user,
+                    analysis_type=analysis_type,
+                    file_name=file_name,
+                    language=language,
+                    code=code,
+                    suggestions=analysis,
+                    score=quality_score,
+                    improvements={}
+                )
+            except Exception as save_err:
+                print(f'Error saving analysis history: {save_err}')
         
         return JsonResponse({
             'success': True,
