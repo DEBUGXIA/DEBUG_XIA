@@ -28,12 +28,45 @@ const Terminal3 = () => {
         // Load stats from API on mount
         useEffect(() => {
           fetchStats()
-          // Restore analysis results from localStorage
+          // Restore all saved data from localStorage
           const savedAnalysis = localStorage.getItem('terminal3_analysisOutput')
-          if (savedAnalysis) {
-            setAnalysisOutput(savedAnalysis)
-          }
+          const savedTitle = localStorage.getItem('terminal3_title')
+          const savedDetails = localStorage.getItem('terminal3_details')
+          const savedLanguage = localStorage.getItem('terminal3_language')
+          const savedTerminalOutput = localStorage.getItem('terminal3_terminalOutput')
+          
+          if (savedAnalysis) setAnalysisOutput(savedAnalysis)
+          if (savedTitle) setTitle(savedTitle)
+          if (savedDetails) setDetails(savedDetails)
+          if (savedLanguage) setLanguage(savedLanguage)
+          if (savedTerminalOutput) setTerminalOutput(JSON.parse(savedTerminalOutput))
         }, [])
+
+        // Auto-save title to localStorage
+        useEffect(() => {
+          if (title.length > 0) {
+            localStorage.setItem('terminal3_title', title)
+          }
+        }, [title])
+
+        // Auto-save details to localStorage
+        useEffect(() => {
+          if (details.length > 0) {
+            localStorage.setItem('terminal3_details', details)
+          }
+        }, [details])
+
+        // Auto-save language to localStorage
+        useEffect(() => {
+          localStorage.setItem('terminal3_language', language)
+        }, [language])
+
+        // Auto-save terminal output to localStorage
+        useEffect(() => {
+          if (terminalOutput.length > 0) {
+            localStorage.setItem('terminal3_terminalOutput', JSON.stringify(terminalOutput))
+          }
+        }, [terminalOutput])
 
         const fetchStats = async () => {
           try {
@@ -456,8 +489,13 @@ const Terminal3 = () => {
                 setTerminalOutput([])
                 setHasError(false)
                 setAnalysisOutput('')
-                // Clear analysis from localStorage
+                setTitle('')
+                // Clear all saved data from localStorage
                 localStorage.removeItem('terminal3_analysisOutput')
+                localStorage.removeItem('terminal3_title')
+                localStorage.removeItem('terminal3_details')
+                localStorage.removeItem('terminal3_language')
+                localStorage.removeItem('terminal3_terminalOutput')
                 // Reset session stats when code is cleared
                 setSessionExecutions(0)
                 setSessionSuccessful(0)

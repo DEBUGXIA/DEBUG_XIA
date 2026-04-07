@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Play, Upload, Trash2 } from 'lucide-react'
 
 const Terminal = () => {
@@ -10,6 +10,32 @@ const Terminal = () => {
         const [language, setLanguage] = useState('Python')
         const [loading, setLoading] = useState(false)
         const [error, setError] = useState('')
+        
+        // Load saved analysis from localStorage on mount
+        useEffect(() => {
+          const savedTask = localStorage.getItem('codeAnalyzer_task')
+          const savedFile = localStorage.getItem('codeAnalyzer_file')
+          
+          if (savedTask) {
+            setTask(JSON.parse(savedTask))
+          }
+          if (savedFile) {
+            setFile(JSON.parse(savedFile))
+          }
+        }, [])
+        
+        // Save analysis to localStorage whenever task or file changes
+        useEffect(() => {
+          if (task.length > 0) {
+            localStorage.setItem('codeAnalyzer_task', JSON.stringify(task))
+          }
+        }, [task])
+        
+        useEffect(() => {
+          if (file.length > 0) {
+            localStorage.setItem('codeAnalyzer_file', JSON.stringify(file))
+          }
+        }, [file])
         
         // Backend API URL
         const BACKEND_URL = 'http://localhost:8000/api/analyze-code/'
@@ -41,6 +67,9 @@ const Terminal = () => {
           const clearHandler = () => {
             setTask([])
             setFile([])
+            // Clear saved analysis from localStorage
+            localStorage.removeItem('codeAnalyzer_task')
+            localStorage.removeItem('codeAnalyzer_file')
           }
 
           const analyzeHandler = () => {

@@ -17,6 +17,50 @@ const Terminal4 = () => {
       performance_gain: 2.5
     })
 
+    // Load saved optimization results from localStorage on mount
+    useEffect(() => {
+      const savedTask = localStorage.getItem('optimizer_task')
+      const savedFile = localStorage.getItem('optimizer_file')
+      const savedLevel = localStorage.getItem('optimizer_level')
+      const savedStats = localStorage.getItem('optimizer_stats')
+      
+      if (savedTask) {
+        setTask(JSON.parse(savedTask))
+      }
+      if (savedFile) {
+        setFile(JSON.parse(savedFile))
+      }
+      if (savedLevel) {
+        setSelectedLevel(savedLevel)
+      }
+      if (savedStats) {
+        setOptimizationStats(JSON.parse(savedStats))
+      }
+    }, [])
+    
+    // Save optimization results to localStorage whenever they change
+    useEffect(() => {
+      if (task.length > 0) {
+        localStorage.setItem('optimizer_task', JSON.stringify(task))
+      }
+    }, [task])
+    
+    useEffect(() => {
+      if (file.length > 0) {
+        localStorage.setItem('optimizer_file', JSON.stringify(file))
+      }
+    }, [file])
+    
+    useEffect(() => {
+      if (selectedLevel) {
+        localStorage.setItem('optimizer_level', selectedLevel)
+      }
+    }, [selectedLevel])
+    
+    useEffect(() => {
+      localStorage.setItem('optimizer_stats', JSON.stringify(optimizationStats))
+    }, [optimizationStats])
+
     const handleFileUpload = (e) => {
       const uploadedFile = e.target.files?.[0]
       if (uploadedFile) {
@@ -171,12 +215,18 @@ const Terminal4 = () => {
       setDetails('')
       setTask([])
       setFile([])
+      setSelectedLevel(null)
       setOptimizationStats({
         total_suggestions: 0,
         avg_improvement: 0,
         critical_issues: 0,
         performance_gain: 2.5
       })
+      // Clear saved optimization from localStorage
+      localStorage.removeItem('optimizer_task')
+      localStorage.removeItem('optimizer_file')
+      localStorage.removeItem('optimizer_level')
+      localStorage.removeItem('optimizer_stats')
       window.dispatchEvent(new CustomEvent('optimizationUpdated', { detail: {
         total_suggestions: 0,
         avg_improvement: 0,
