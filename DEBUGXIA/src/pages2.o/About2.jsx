@@ -1,7 +1,7 @@
 import React from "react";
 import { Lightbulb, Brain, Zap, ChartNoAxesCombined, SearchCode, GraduationCap, Disc2, Globe, AlarmClock, Mail, Sparkles } from 'lucide-react'
 
-const About = () => {
+const About2 = () => {
   return (
     <div className="rounded-2xl bg-white/5 backdrop-blur-xl shadow-2xl text-white px-6 py-12 mt-5">
       
@@ -131,4 +131,4 @@ const About = () => {
   );
 };
 
-export default About
+export default About2

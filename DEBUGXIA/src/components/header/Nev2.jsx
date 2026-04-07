@@ -11,6 +11,7 @@ const Nev2 = () => {
       <Link to='/Home2'>Code Analyzer</Link>
       <Link to='/Terminal2'>Terminal</Link>
       <Link to='/Optimizer'>Optimizer</Link>
+      <Link to='/About2'>About</Link>
     </div>
   )
 }

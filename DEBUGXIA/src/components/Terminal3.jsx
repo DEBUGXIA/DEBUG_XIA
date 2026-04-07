@@ -14,7 +14,8 @@ const Terminal3 = () => {
         const [analysisLoading, setAnalysisLoading] = useState(false)
         const [hasError, setHasError] = useState(false)
         const [isAnalysisExpanded, setIsAnalysisExpanded] = useState(false)
-        const [executionStats, setExecutionStats] = useState({
+        const [programInput, setProgramInput] = useState('')
+        const [, setExecutionStats] = useState({
           total_executions: 0,
           successful_executions: 0,
           failed_executions: 0,
@@ -140,12 +141,6 @@ const Terminal3 = () => {
           }
         }
 
-        const clearStats = () => {
-          // Stats are persistent in database, do NOT clear them
-          // Just reload from database to ensure they're accurate
-          fetchStats()
-        }
-
         // Helper function to save analysis output
         const saveAnalysis = (analysisText) => {
           setAnalysisOutput(analysisText)
@@ -153,23 +148,6 @@ const Terminal3 = () => {
           localStorage.setItem('terminal3_analysisOutput', analysisText)
         }
 
-        const getAverageTime = () => {
-          if (!executionStats.average_execution_time) return 0
-          return executionStats.average_execution_time.toFixed(2)
-        }
-
-        const getSuccessRate = () => {
-          if (sessionExecutions === 0) return 0
-          return Math.round((sessionSuccessful / sessionExecutions) * 100)
-        }
-        
-        const languageExtensions = {
-          'Python': '.py',
-          'Java': '.java',
-          'C': '.c',
-          'C++': '.cpp'
-        }
-        
         const handleFileUpload = (e) => {
           const uploadedFile = e.target.files?.[0]
           if (uploadedFile) {
@@ -244,7 +222,8 @@ const Terminal3 = () => {
                 },
                 body: JSON.stringify({
                   code: details,
-                  language: language
+                  language: language,
+                  input: programInput
                 })
               })
               
@@ -361,56 +340,6 @@ const Terminal3 = () => {
             }
           }
 
-          const analyzeResult = async () => {
-            if (terminalOutput.length === 0) {
-              alert('Please execute code first')
-              return
-            }
-
-            setAnalysisLoading(true)
-            setShowAnalysis(true)
-            
-            try {
-              const output = terminalOutput.find(o => o.type === 'output')?.content || ''
-              const error = terminalOutput.find(o => o.type === 'error')?.content || ''
-              const fileName = file.length > 0 ? file[0].name : 'code.py'
-              const token = localStorage.getItem('access_token') || localStorage.getItem('token')
-              
-              const response = await fetch('http://localhost:8000/api/analyze-execution/', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  ...(token && { 'Authorization': `Bearer ${token}` })
-                },
-                body: JSON.stringify({
-                  code: details,
-                  language: language,
-                  output: output,
-                  error: error,
-                  file_name: fileName,
-                  analysis_type: 'quality'
-                })
-              })
-              
-              if (!response.ok) {
-                const errorData = await response.json()
-                saveAnalysis('Error: ' + (errorData.error || 'Failed to analyze'))
-              } else {
-                const data = await response.json()
-                if (data.success) {
-                  saveAnalysis(data.analysis)
-                  window.dispatchEvent(new CustomEvent('analysisCompleted'))
-                } else {
-                  saveAnalysis('Error: ' + data.analysis)
-                }
-              }
-            } catch (err) {
-              saveAnalysis('Error: ' + err.message)
-            } finally {
-              setAnalysisLoading(false)
-            }
-          }
-
   return (
     <div className='m-10 flex flex-row justify-between gap-10 text-gray-300 px-30 py-10'>
       <form className='flex-col w-2/3 gap-5 justify-between bg-gray-950 border-1 border-gray-500 rounded-2xl p-5' onSubmit={(e) =>{SubmitHandler(e)}} action="">
@@ -429,11 +358,10 @@ const Terminal3 = () => {
               <input type="text" placeholder='File Name' className='px-5 py-2 text-white font-semibold text-lg tracking-wide border-gray-700 border-2 rounded-md hover:border-blue-400 transition w-full' value={title} onChange={(e) =>{setTitle(e.target.value)}}/>
             </div>
             <div className=' w-1/3 flex items-center font-medium text-lg text-gray-300 tracking-wide gap-2'>
-            <label htmlFor="cars">Choose Language :</label>
+            <label htmlFor="cars">Language :</label>
 
               <select name="cars" id="cars" value={language} onChange={(e) => setLanguage(e.target.value)} className='bg-gray-950 text-gray-300 w-24'>
                 <option value="Python">Python</option>
-                <option value="Java">Java</option>
                 <option value="C">C</option>
                 <option value="C++">C++</option>
               </select>
@@ -449,7 +377,7 @@ const Terminal3 = () => {
               <button 
                 type="button"
                 onClick={() => document.getElementById('fileInput').click()}
-                className='px-6 py-2 font-semibold text-lg tracking-wide rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 border-2 border-blue-500 hover:border-blue-400 text-white flex flex-row items-center justify-center gap-2 transition-all duration-300 whitespace-nowrap shadow-lg hover:shadow-blue-500/50 hover:scale-105'
+                className='px-6 py-2 font-semibold text-lg tracking-wide rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 border-2 border-blue-500 hover:border-blue-400 text-white flex flex-row items-center justify-center gap-2 transition-all duration-300 whitespace-nowrap shadow-lg hover:scale-105'
               >
                 <Upload strokeWidth={2} size={20} />
                 <span>Browse</span>
@@ -486,6 +414,7 @@ const Terminal3 = () => {
               type="button"
               onClick={() => {
                 setDetails('')
+                setProgramInput('')
                 setTerminalOutput([])
                 setHasError(false)
                 setAnalysisOutput('')
@@ -514,7 +443,7 @@ const Terminal3 = () => {
   
         <div className='font-bold text-xl tracking-wide mb-2'>{hasError && analysisOutput ? 'Error Analysis' : 'Terminal Output'}</div>
   
-        <div className='border-2 border-gray-500 rounded-md w-full h-[94%] p-3 bg-gray-900 overflow-y-auto'>
+        <div className='border-2 border-gray-500 rounded-md w-full h-[70%] p-3 bg-gray-900 overflow-y-auto'>
           {hasError && analysisOutput ? (
             <div className='text-gray-300 whitespace-pre-wrap break-words font-sans text-sm leading-relaxed'>
               {analysisLoading ? '⏳ Analyzing error...' : analysisOutput}
@@ -538,6 +467,27 @@ const Terminal3 = () => {
               )}
             </div>
           )}
+        </div>
+
+        <div className='mt-3'>
+          <div className='text-gray-400 text-sm mb-2'>Terminal Input (stdin):</div>
+          <textarea
+            value={programInput}
+            onChange={(e) => setProgramInput(e.target.value)}
+            placeholder='Type input here, one line per input value...'
+            className='w-full h-24 rounded-lg border border-gray-600 bg-black/80 text-green-200 font-mono px-3 py-2 resize-none focus:outline-blue-500'
+            spellCheck='false'
+          />
+          <div className='flex justify-between items-center mt-2'>
+            <div className='text-gray-500 text-xs'>Press Execute Code after typing input.</div>
+            <button
+              type='button'
+              onClick={() => setProgramInput('')}
+              className='text-sm text-blue-300 hover:text-white transition'
+            >
+              Clear input
+            </button>
+          </div>
         </div>
         
         {hasError && analysisOutput && (

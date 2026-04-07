@@ -41,7 +41,7 @@ const Home = () => {
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="inline-block tracking-wide bg-gradient-to-r from-blue-500 to-sky-300 text-xl font-semibold px-7 py-3 rounded-2xl"> <Link to='/Get_Started'>Connect With VS Code</Link> </motion.span></button>
+            className="inline-block tracking-wide bg-gradient-to-r from-blue-500 to-sky-300 text-xl font-semibold px-7 py-3 rounded-2xl"> <Link to='/Get_Started'>Connect With Code Analyzer</Link> </motion.span></button>
         <button>
           <Link to='/Dashboard'>
           <motion.span

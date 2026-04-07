@@ -23,6 +23,7 @@ import Edit_Profile from './pages2.o/Edit_Profile'
 import Optimizer from './pages2.o/Optimizer'
 import Dashboard2 from './pages2.o/Dashboard2'
 import Footer2 from './components/Footer2'
+import About2 from './pages2.o/About2'
 import { authAPI, setAutoLogoutCallback, startHealthCheck, stopHealthCheck } from './services/api'
 
 
@@ -91,7 +92,8 @@ const App = () => {
   "/Error_History",
   "/Edit_Profile",
   "/Optimizer",
-  "/Dashboard2"
+  "/Dashboard2",
+  "/About2"
 ];
 
 const isAfterLoginRoute = afterLoginRoutes.includes(location.pathname);
@@ -197,6 +199,15 @@ if (loading) {
           element={
             <ProtectedRoute isAuth={isAuth}>
               <Optimizer/>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path='/About2'
+          element={
+            <ProtectedRoute isAuth={isAuth}>
+              <About2/>
             </ProtectedRoute>
           }
         />

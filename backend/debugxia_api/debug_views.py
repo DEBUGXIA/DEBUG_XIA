@@ -96,6 +96,7 @@ def execute_code(request):
         data = request.data
         code = data.get('code', '')
         language = data.get('language', 'Python')
+        user_input = data.get('input', '')
         
         if not code:
             return JsonResponse({'error': 'No code provided'}, status=400)
@@ -112,6 +113,7 @@ def execute_code(request):
                     [sys.executable, temp_file],
                     capture_output=True,
                     text=True,
+                    input=user_input,
                     timeout=10
                 )
             elif language == 'Java':
@@ -141,6 +143,7 @@ def execute_code(request):
                     ['java', '-cp', temp_dir, class_name],
                     capture_output=True,
                     text=True,
+                    input=user_input,
                     timeout=10
                 )
             elif language in ['C', 'C++']:
@@ -174,6 +177,7 @@ def execute_code(request):
                     [executable],
                     capture_output=True,
                     text=True,
+                    input=user_input,
                     timeout=10
                 )
             else:

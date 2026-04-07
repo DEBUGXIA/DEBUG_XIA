@@ -185,11 +185,10 @@ const Terminal = () => {
               <input type="text" placeholder='File Name' className='px-5 py-2 text-white font-semibold text-lg tracking-wide border-gray-300 border-2 rounded-md w-full' value={title} onChange={(e) =>{setTitle(e.target.value)}}/>
             </div>
             <div className=' w-1/3 flex items-center font-medium text-lg text-gray-300 tracking-wide gap-2'>
-            <label htmlFor="cars">Choose Your Language :</label>
+            <label htmlFor="cars">Language :</label>
 
               <select name="cars" id="cars" value={language} onChange={(e) => setLanguage(e.target.value)} className=' text-white w-24'>
                 <option value="Python" className=' bg-gray-900'>Python</option>
-                <option value="Java" className=' bg-gray-900'>Java</option>
                 <option value="C" className=' bg-gray-900'>C</option>
                 <option value="C++" className=' bg-gray-900'>C++</option>
               </select>
@@ -205,7 +204,7 @@ const Terminal = () => {
               <button 
                 type="button"
                 onClick={() => document.getElementById('fileInput').click()}
-                className='px-6 py-2 font-semibold text-lg tracking-wide rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 border-2 border-blue-500 hover:border-blue-400 text-white flex flex-row items-center justify-center gap-2 transition-all duration-300 whitespace-nowrap shadow-lg hover:shadow-blue-500/50 hover:scale-105'
+                className='px-6 py-2 font-semibold text-lg tracking-wide rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 border-2 border-blue-500 hover:border-blue-400 text-white flex flex-row items-center justify-center gap-2 transition-all duration-300 whitespace-nowrap shadow-lg hover:scale-105'
               >
                 <Upload strokeWidth={2} size={20} />
                 <span>Browse File</span>

@@ -296,8 +296,8 @@ const Edit_Profile = () => {
               src={image} 
               alt="Profile preview" 
               className='w-70 h-70 border-2 border-gray-500 rounded-full object-cover'
-              onError={(e) => console.error('❌ Image failed to load:', image)}
-              onLoad={() => console.log('✅ Image loaded:', image)}
+              onError={(e) => console.error('Image failed to load:', image)}
+              onLoad={() => console.log('Image loaded:', image)}
             />
           ) : (
             <div className='w-70 h-70 border-2 border-gray-500 rounded-full bg-gray-800 flex items-center justify-center text-gray-400'>
@@ -311,7 +311,7 @@ const Edit_Profile = () => {
 
           {imageFile && (
             <div className='w-full bg-blue-900/40 border border-blue-500 rounded-lg p-2 text-center'>
-              <p className='text-blue-300 text-xs font-medium'>✅ File selected: {imageFile.name}</p>
+              <p className='text-blue-300 text-xs font-medium'>File selected: {imageFile.name}</p>
               <p className='text-blue-200 text-xs'>({(imageFile.size / 1024).toFixed(2)} KB)</p>
             </div>
           )}
@@ -320,12 +320,12 @@ const Edit_Profile = () => {
             <button 
               onClick={() => fileInputRef.current.click()} 
               className='px-4 py-2 bg-gray-900 text-white rounded-md text-sm hover:bg-gray-700 transition'>
-              📤 Upload new
+               Upload new
             </button>
             <button 
               onClick={handleRemove} 
               className='px-4 py-2 border border-gray-300 rounded-md text-sm text-gray-300 hover:bg-gray-900/50 transition'>
-              🗑️ Remove
+              Remove
             </button>
 
           </div>
@@ -436,7 +436,7 @@ const Edit_Profile = () => {
 
         {imageFile && (
           <div className='w-full bg-green-900/30 border border-green-500 rounded-lg p-3 mb-2'>
-            <p className='text-green-400 text-sm font-medium'>📁 Ready to upload: <span className='font-bold'>{imageFile.name}</span></p>
+            <p className='text-green-400 text-sm font-medium'>Ready to upload: <span className='font-bold'>{imageFile.name}</span></p>
             <p className='text-green-300 text-xs mt-1'>Click Save to upload this image</p>
           </div>
         )}
@@ -447,53 +447,10 @@ const Edit_Profile = () => {
             disabled={saving}
             className='flex-1 bg-green-600 border-2 border-white rounded-xl text-white py-2 px-4 tracking-wide font-medium text-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition'
           >
-            {saving ? '⏳ Saving...' : imageFile ? '💾 Save & Upload' : '💾 Save Changes'}
+            {saving ? ' Saving...' : imageFile ? 'Save & Upload' : ' Save Changes'}
           </button>
           
-          {imageFile && !saving && (
-            <button 
-              onClick={() => {
-                console.log('🔄 Quick upload test with direct fetch...')
-                console.log('   File:', imageFile.name, 'Size:', imageFile.size)
-                
-                const formData = new FormData()
-                formData.append('profile_image', imageFile)
-                formData.append('bio', '')
-                
-                const token = localStorage.getItem('access_token')
-                console.log('   Token:', token ? 'exists' : 'MISSING')
-                
-                fetch('http://localhost:8000/api/profiles/me/', {
-                  method: 'PUT',
-                  headers: { 'Authorization': `Bearer ${token}` },
-                  body: formData
-                })
-                .then(r => {
-                  console.log('   Status:', r.status)
-                  return r.json().then(data => ({status: r.status, data}))
-                })
-                .then(({status, data}) => {
-                  if (status === 200) {
-                    console.log('   ✅ Upload worked!')
-                    if (data.user?.profile_image) {
-                      setImage(data.user.profile_image)
-                      setImageFile(null)
-                      alert('✅ Picture uploaded successfully!')
-                    }
-                  } else {
-                    console.log('   ⚠ Status not 200:', status)
-                  }
-                })
-                .catch(err => {
-                  console.error('   ❌ Error:', err)
-                  alert('❌ Upload failed: ' + err)
-                })
-              }}
-              className='px-3 py-2 bg-blue-600 text-white rounded-xl text-sm hover:bg-blue-700 transition'
-            >
-              🧪 Quick Test
-            </button>
-          )}
+          
         </div>
       </div>
     </div>

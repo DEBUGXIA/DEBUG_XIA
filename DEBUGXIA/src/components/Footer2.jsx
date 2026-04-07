@@ -28,18 +28,10 @@ const Footer2 = () => {
         <div className='mt-40 flex flex-col items-start justify-between gap-5'>
           <div><h1 className='tracking-wide font-medium text-xl'>Quick Links</h1></div>
           <div className='flex flex-col items-start justify-between font-light text-lg text-white'>
-            <Link to='/About'>About</Link>
             <Link to='/Home2'>Code Analyzer</Link>
             <Link to='/Terminal2'>Terminal</Link>
             <Link to='/Optimizer'>Optimizer</Link>
-          </div>
-        </div>
-        <div className='mt-15 flex flex-col items-start justify-between gap-5'>
-          <div><h1 className='tracking-wide font-medium text-xl'>Legal</h1></div>
-          <div className='flex flex-col items-start justify-between font-light text-lg text-white'>
-            <Link to='Terms_and_con'>Terms & Conditions</Link>
-            <Link to='/Privacy_Policy'>Privacy Policy</Link>
-            
+            <Link to='/About2'>About</Link>
           </div>
         </div>
       </div>

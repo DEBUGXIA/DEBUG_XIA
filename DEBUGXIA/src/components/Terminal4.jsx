@@ -253,7 +253,7 @@ const Terminal4 = () => {
               <input type="text" placeholder='File Name' className='px-5 py-2 text-white font-semibold text-lg tracking-wide border-gray-700 border-2 rounded-md hover:border-blue-400 transition w-full' value={title} onChange={(e) =>{setTitle(e.target.value)}}/>
             </div>
             <div className=' w-1/3 flex items-center font-medium text-lg text-gray-500 tracking-wide gap-2'>
-              <label htmlFor="language">Choose Language :</label>
+              <label htmlFor="language">Language:</label>
               <select 
                 id="language"
                 value={language}
@@ -261,7 +261,6 @@ const Terminal4 = () => {
                 className='bg-gray-950 text-gray-300 w-24'
               >
                 <option value="Python">Python</option>
-                <option value="Java">Java</option>
                 <option value="C">C</option>
                 <option value="C++">C++</option>
               </select>
@@ -277,7 +276,7 @@ const Terminal4 = () => {
               <button 
                 type="button"
                 onClick={() => document.getElementById('fileInput').click()}
-                className='px-6 py-2 font-semibold text-lg tracking-wide rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 border-2 border-blue-500 text-white flex flex-row items-center justify-center gap-2 transition-all duration-300'
+                className='px-3 py-1.5 font-semibold text-md tracking-wide rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 border-2 border-blue-500 text-white flex flex-row items-center justify-center gap-2 transition-all duration-300'
               >
                 <Upload strokeWidth={2} size={20} />
                 <span>Browse</span>
