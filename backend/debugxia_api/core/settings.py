@@ -64,12 +64,8 @@ WSGI_APPLICATION = 'debugxia_api.core.wsgi.application'
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'debugxia_db',
-        'USER': 'postgres',
-        'PASSWORD': '2003',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
