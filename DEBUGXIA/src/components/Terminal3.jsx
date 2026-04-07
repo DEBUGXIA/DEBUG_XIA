@@ -15,10 +15,15 @@ const Terminal3 = () => {
         const [hasError, setHasError] = useState(false)
         const [isAnalysisExpanded, setIsAnalysisExpanded] = useState(false)
         const [executionStats, setExecutionStats] = useState({
-          total: 0,
-          successful: 0,
-          times: []
+          total_executions: 0,
+          successful_executions: 0,
+          failed_executions: 0,
+          average_execution_time: 0,
+          success_rate: 0
         })
+        // Session-based success rate for current code file
+        const [sessionExecutions, setSessionExecutions] = useState(0)
+        const [sessionSuccessful, setSessionSuccessful] = useState(0)
 
         // Load stats from API on mount
         useEffect(() => {
@@ -53,6 +58,13 @@ const Terminal3 = () => {
         // Update stats and save to database
         const updateStats = async (success, executionTime) => {
           try {
+            // Update session stats for current code file
+            const newSessionExecutions = sessionExecutions + 1
+            const newSessionSuccessful = success ? sessionSuccessful + 1 : sessionSuccessful
+            
+            setSessionExecutions(newSessionExecutions)
+            setSessionSuccessful(newSessionSuccessful)
+
             const token = localStorage.getItem('access_token') || localStorage.getItem('token')
             if (!token) return // Not logged in
             
@@ -73,8 +85,16 @@ const Terminal3 = () => {
               const data = await response.json()
               if (data.success) {
                 setExecutionStats(data.stats)
-                // Also dispatch event so Terminal2 updates
-                window.dispatchEvent(new CustomEvent('statsUpdated', { detail: data.stats }))
+                // Calculate session success rate
+                const sessionSuccessRate = newSessionExecutions > 0 
+                  ? Math.round((newSessionSuccessful / newSessionExecutions) * 100)
+                  : 0
+                // Dispatch event with session success rate
+                const statsWithSessionRate = {
+                  ...data.stats,
+                  success_rate: sessionSuccessRate
+                }
+                window.dispatchEvent(new CustomEvent('statsUpdated', { detail: statsWithSessionRate }))
               }
             }
           } catch (err) {
@@ -83,12 +103,9 @@ const Terminal3 = () => {
         }
 
         const clearStats = () => {
-          // Stats are persistent in database, just clear the local state
-          setExecutionStats({
-            total: 0,
-            successful: 0,
-            times: []
-          })
+          // Stats are persistent in database, do NOT clear them
+          // Just reload from database to ensure they're accurate
+          fetchStats()
         }
 
         const getAverageTime = () => {
@@ -97,8 +114,8 @@ const Terminal3 = () => {
         }
 
         const getSuccessRate = () => {
-          if (!executionStats.success_rate) return 0
-          return executionStats.success_rate
+          if (sessionExecutions === 0) return 0
+          return Math.round((sessionSuccessful / sessionExecutions) * 100)
         }
         
         const languageExtensions = {
@@ -111,6 +128,10 @@ const Terminal3 = () => {
         const handleFileUpload = (e) => {
           const uploadedFile = e.target.files?.[0]
           if (uploadedFile) {
+            // Reset session stats when new file is uploaded
+            setSessionExecutions(0)
+            setSessionSuccessful(0)
+            
             const fileName = uploadedFile.name
             const fileExtension = fileName.split('.').pop().toLowerCase()
             
@@ -403,6 +424,9 @@ const Terminal3 = () => {
                 setTerminalOutput([])
                 setHasError(false)
                 setAnalysisOutput('')
+                // Reset session stats when code is cleared
+                setSessionExecutions(0)
+                setSessionSuccessful(0)
               }}
               className=' border-0 bg-gray-700 hover:bg-red-600 rounded-md py-2 px-3 transition-all cursor-pointer'
               title="Clear Code"

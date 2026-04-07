@@ -8,7 +8,7 @@ const Terminal2 = () => {
     total_executions: 0,
     successful_executions: 0,
     average_execution_time: 0,
-    success_rate: 0
+    success_rate: 0  // Session-based success rate, not from database
   })
 
   useEffect(() => {
@@ -50,7 +50,13 @@ const Terminal2 = () => {
       if (response.ok) {
         const data = await response.json()
         if (data.success && data.stats) {
-          setStats(data.stats)
+          // Load persistent stats from database, but reset session success_rate to 0
+          setStats({
+            total_executions: data.stats.total_executions,
+            successful_executions: data.stats.successful_executions,
+            average_execution_time: data.stats.average_execution_time,
+            success_rate: 0  // Session-based, starts at 0
+          })
         }
       }
     } catch (err) {
@@ -64,8 +70,8 @@ const Terminal2 = () => {
   }
 
   const getSuccessRate = () => {
-    if (!stats.success_rate) return '0%'
-    return stats.success_rate + '%'
+    if (stats.success_rate === undefined || stats.success_rate === null) return '0%'
+    return Math.round(stats.success_rate) + '%'
   }
 
   const Analyzer=[
