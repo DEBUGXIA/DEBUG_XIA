@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
+from django.utils import timezone
 
 class User(AbstractUser):
     """
@@ -229,3 +230,51 @@ class AnalysisHistory(models.Model):
 
     def __str__(self):
         return f"{self.user.email} - {self.analysis_type}"
+
+
+class ExecutionStats(models.Model):
+    """
+    Track user's code execution statistics
+    """
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='execution_stats')
+    total_executions = models.IntegerField(default=0)
+    successful_executions = models.IntegerField(default=0)
+    failed_executions = models.IntegerField(default=0)
+    total_execution_time = models.FloatField(default=0.0)  # In seconds
+    average_execution_time = models.FloatField(default=0.0)  # In seconds
+    languages_used = models.JSONField(default=dict)  # e.g., {"Python": 5, "Java": 2}
+    last_execution_date = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Execution Stats'
+        verbose_name_plural = 'Execution Stats'
+
+    def __str__(self):
+        return f"{self.user.email} - Execution Stats"
+
+    def update_stats(self, success, execution_time, language):
+        """Update execution statistics"""
+        self.total_executions += 1
+        if success:
+            self.successful_executions += 1
+        else:
+            self.failed_executions += 1
+        
+        self.total_execution_time += execution_time
+        self.average_execution_time = self.total_execution_time / self.total_executions
+        
+        # Track languages used
+        if language not in self.languages_used:
+            self.languages_used[language] = 0
+        self.languages_used[language] += 1
+        
+        self.last_execution_date = timezone.now()
+        self.save()
+
+    def get_success_rate(self):
+        """Calculate success rate percentage"""
+        if self.total_executions == 0:
+            return 0
+        return round((self.successful_executions / self.total_executions) * 100)

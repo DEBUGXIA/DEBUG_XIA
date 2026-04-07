@@ -11,8 +11,16 @@ const Terminal = () => {
         const [loading, setLoading] = useState(false)
         const [error, setError] = useState('')
         
-        // Ollama Mistral setup
-        const OLLAMA_API_URL = 'http://localhost:11434/api/generate'
+        // Backend API URL
+        const BACKEND_URL = 'http://localhost:8000/api/analyze-code/'
+        
+        // Language to extension mapping
+        const languageExtensions = {
+          'Python': '.py',
+          'Java': '.java',
+          'C': '.c',
+          'C++': '.cpp'
+        }
         
           const SubmitHandler = (e) => {
               e.preventDefault()
@@ -49,26 +57,24 @@ const Terminal = () => {
             setError('')
             
             try {
-              const prompt = `Analyze this ${language} code and provide:\n1. Error analysis\n2. Improvements\n3. Best practices\n\nCode:\n${details}`
-              
-              const response = await fetch(OLLAMA_API_URL, {
+              const response = await fetch(BACKEND_URL, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                  model: 'mistral',
-                  prompt: prompt,
-                  stream: false
+                  code: details,
+                  language: language
                 })
               })
               
               if (!response.ok) {
-                throw new Error('Failed to connect to Ollama. Make sure Ollama is running: ollama serve')
+                const errorData = await response.json()
+                throw new Error(errorData.error || 'Failed to analyze code')
               }
               
               const data = await response.json()
-              const analysis = data.response
+              const analysis = data.analysis
               
               const CopyTask = [...task]
               CopyTask.push({
@@ -79,7 +85,8 @@ const Terminal = () => {
               const CopyFile = [...file]
               CopyFile.push({
                 file: title, 
-                title: title || 'Untitled'
+                title: title || 'Untitled',
+                extension: languageExtensions[language] || '.txt'
               })
               
               setTask(CopyTask)
@@ -169,9 +176,9 @@ const Terminal = () => {
               <button 
                 type="button"
                 onClick={() => document.getElementById('fileInput').click()}
-                className='px-6 py-2 font-semibold text-lg tracking-wide rounded-xl bg-gray-800 hover:bg-gray-700 border-2 border-gray-600 hover:border-blue-500 text-white flex flex-row items-center justify-between gap-2 transition-all duration-300 whitespace-nowrap'
+                className='px-6 py-2 font-semibold text-lg tracking-wide rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 border-2 border-blue-500 hover:border-blue-400 text-white flex flex-row items-center justify-center gap-2 transition-all duration-300 whitespace-nowrap shadow-lg hover:shadow-blue-500/50 hover:scale-105'
               >
-                <Upload strokeWidth={1.75} size={20} />
+                <Upload strokeWidth={2} size={20} />
                 <span>Browse File</span>
               </button>
             </div>
@@ -208,25 +215,57 @@ const Terminal = () => {
           </button>
         </div>
   
-        <div className='rounded-2xl  border-2 border-gray-500 w-full h-[54%] p-2 bg-gray-950'>
+        <div className='rounded-2xl  border-2 border-gray-500 w-full h-[75%] p-4 bg-gray-950 overflow-hidden flex flex-col'>
           {error && (
             <div className='p-4 rounded-xl bg-red-900 border border-red-700 text-red-200 mb-4'>
               <p className='text-sm'>{error}</p>
             </div>
           )}
-          <div className=''>
+          <div className='mb-3'>
           {file.map(function(elem,idx){
-            return <div key={idx} className='font-bold text-xl tracking-wide'>{elem.title}</div>
+            return <div key={idx} className='font-bold text-lg tracking-wide text-blue-400 mb-3 pb-2 border-b border-blue-500'>{elem.title}<span className='text-cyan-300 text-sm ml-1'>{elem.extension || '.txt'}</span></div>
           })}
         </div>
           
-          <div className='max-h-[400px] overflow-y-auto space-y-4 h-[90%] '>
+          <div className='max-h-full overflow-y-auto space-y-4 flex-1 pr-2'>
                {task.map(function(elem, idx) {
+                  const formatAnalysis = (text) => {
+                    // Remove markdown formatting
+                    text = text.replace(/\*\*\*/g, '').replace(/\*\*/g, '')
+                    
+                    return text.split('\n').map((line, i) => {
+                      if (line.match(/^\d+\.|Error Analysis:|Improvements:|Best Practices:/)) {
+                        return (
+                          <div key={i} className='font-bold text-blue-300 mt-3 mb-2'>
+                            {line}
+                          </div>
+                        )
+                      }
+                      if (line.startsWith('-') || line.startsWith('•')) {
+                        return (
+                          <div key={i} className='ml-4 text-gray-300 text-sm leading-relaxed break-words'>
+                            {line}
+                          </div>
+                        )
+                      }
+                      if (line.trim() === '') {
+                        return <div key={i} className='h-1'></div>
+                      }
+                      return (
+                        <div key={i} className='text-gray-400 text-sm leading-relaxed ml-2 break-words'>
+                          {line}
+                        </div>
+                      )
+                    })
+                  }
+                  
                   return (
                 <div 
                  key={idx} 
-                 className='p-4 rounded-xl break-words whitespace-pre-wrap'>
-                  <h3>{elem.details}</h3>
+                 className='p-5 rounded-xl bg-gradient-to-b from-gray-900 to-gray-950 border border-gray-700 hover:border-blue-500 transition-all w-full'>
+                  <div className='text-gray-200 break-words whitespace-normal overflow-wrap break-word'>
+                    {formatAnalysis(elem.details)}
+                  </div>
                 </div>
                  )
                })}

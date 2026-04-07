@@ -1,14 +1,79 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Terminal, Play, CircleCheckBig, CodeXml, SquareChevronRight } from 'lucide-react'
 import Terminal3 from '../components/Terminal3'
 
 const Terminal2 = () => {
 
+  const [stats, setStats] = useState({
+    total_executions: 0,
+    successful_executions: 0,
+    average_execution_time: 0,
+    success_rate: 0
+  })
+
+  useEffect(() => {
+    // Load stats from API if logged in
+    fetchStats()
+
+    // Listen for stats updates from Terminal3
+    const handleStatsUpdate = (event) => {
+      if (event.detail) {
+        setStats(event.detail)
+      }
+    }
+
+    window.addEventListener('statsUpdated', handleStatsUpdate)
+    return () => window.removeEventListener('statsUpdated', handleStatsUpdate)
+  }, [])
+
+  const fetchStats = async () => {
+    try {
+      const token = localStorage.getItem('access_token') || localStorage.getItem('token')
+      if (!token) {
+        // Try localStorage fallback if not logged in
+        const saved = localStorage.getItem('debugxia_stats')
+        if (saved) {
+          const parsed = JSON.parse(saved)
+          setStats(parsed)
+        }
+        return
+      }
+      
+      const response = await fetch('http://localhost:8000/api/execution-stats/', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      
+      if (response.ok) {
+        const data = await response.json()
+        if (data.success && data.stats) {
+          setStats(data.stats)
+        }
+      }
+    } catch (err) {
+      console.log('Could not fetch stats:', err.message)
+    }
+  }
+
+  const getAverageTime = () => {
+    if (!stats.average_execution_time) return '0s'
+    return stats.average_execution_time.toFixed(2) + 's'
+  }
+
+  const getSuccessRate = () => {
+    if (!stats.success_rate) return '0%'
+    return stats.success_rate + '%'
+  }
+
   const Analyzer=[
-    {Logo: <Play color="#5fa8ec" strokeWidth={1.25} />, Title: "Executions Today", Num: "12"},
-    {Logo: <CircleCheckBig color="#5fa8ec" strokeWidth={1.25} />, Title: "Success Rate", Num: "92%"},
-    {Logo: <CodeXml color="#5fa8ec" strokeWidth={1.25} />, Title: "Avg Time", Num: "0.86s"},
+    {Logo: <Play color="#5fa8ec" strokeWidth={1.25} />, Title: "Executions Today", Num: stats.total_executions?.toString() || '0'},
+    {Logo: <CircleCheckBig color="#5fa8ec" strokeWidth={1.25} />, Title: "Success Rate", Num: getSuccessRate()},
+    {Logo: <CodeXml color="#5fa8ec" strokeWidth={1.25} />, Title: "Avg Time", Num: getAverageTime()},
   ]
+
   return (
     <div className=' flex flex-col justify-between ml-20 mt-18 gap-8 '>
 
@@ -50,16 +115,6 @@ const Terminal2 = () => {
 
       <div className='-ml-40 -mt-15'>
         <Terminal3/>
-      </div>
-
-      <div className=' bg-gray-950 border-1 border-gray-500 rounded-xl p-5 mr-35 -mt-18 h-50 flex flex-col gap-3'>
-        <div className=' flex flex-row  gap-3'>
-          <div><SquareChevronRight color="#a6a6a6" strokeWidth={1.25} /></div>
-          <div><h1>Terminal</h1></div>
-        </div>
-        <div>
-          <textarea name="" id="" className=' w-[100%] h-30 rounded-md '></textarea>
-        </div>
       </div>
 
     </div>

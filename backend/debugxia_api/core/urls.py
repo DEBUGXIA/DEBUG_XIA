@@ -8,6 +8,7 @@ from debugxia_api.users.views import (
     UserViewSet, UserProfileView, ErrorLogViewSet, 
     CodeExecutionViewSet, AnalysisHistoryViewSet
 )
+from debugxia_api.debug_views import analyze_code, execute_code, analyze_execution, execution_stats
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet, basename='user')
@@ -25,6 +26,12 @@ urlpatterns = [
     
     # User Profile API (simplified)
     path('api/profiles/me/', UserProfileView.as_view(), name='profile_me'),
+    
+    # Code Analysis API
+    path('api/analyze-code/', analyze_code, name='analyze_code'),
+    path('api/execute-code/', execute_code, name='execute_code'),
+    path('api/analyze-execution/', analyze_execution, name='analyze_execution'),
+    path('api/execution-stats/', execution_stats, name='execution_stats'),
     
     # API Routes
     path('api/', include(router.urls)),
