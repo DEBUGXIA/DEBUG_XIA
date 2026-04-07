@@ -1,14 +1,33 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Zap } from 'lucide-react'
 import Terminal4 from '../components/Terminal4'
 
 const Optimizer = () => {
 
+  const [optimizationStats, setOptimizationStats] = useState({
+    total_suggestions: 0,
+    avg_improvement: 0,
+    critical_issues: 0,
+    performance_gain: 2.5
+  })
+
+  useEffect(() => {
+    // Listen for optimization suggestions from Terminal4
+    const handleOptimizationUpdate = (event) => {
+      if (event.detail) {
+        setOptimizationStats(event.detail)
+      }
+    }
+
+    window.addEventListener('optimizationUpdated', handleOptimizationUpdate)
+    return () => window.removeEventListener('optimizationUpdated', handleOptimizationUpdate)
+  }, [])
+
   const Analyzer=[
-    { Title: "Total Suggestions", Num: "0"},
-    { Title: "Avg Improvement", Num: "0%"},
-    { Title: "Critical Issues", Num: "0"},
-    { Title: "Est. Performance Gain", Num: "2.5x"},
+    { Title: "Total Suggestions", Num: optimizationStats.total_suggestions.toString()},
+    { Title: "Avg Improvement", Num: Math.round(optimizationStats.avg_improvement) + "%"},
+    { Title: "Critical Issues", Num: optimizationStats.critical_issues.toString()},
+    { Title: "Est. Performance Gain", Num: optimizationStats.performance_gain.toFixed(2) + "x"},
   ]
   return (
     <div className=' flex flex-col justify-between ml-20 mt-18 gap-8 '>
