@@ -1,14 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import Dashboard2 from "../../pages2.o/Dashboard2";
 import Profile from "../../pages2.o/Profile";
 import { authAPI } from "../../services/api";
 
-const Profileh = () => {
+const Profileh = ({ setIsAuth }) => {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const dropdownRef = useRef();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handler = (e) => {
@@ -99,6 +100,24 @@ const Profileh = () => {
     }
   };
 
+  // Logout handler
+  const handleLogout = async () => {
+    try {
+      console.log('🔓 [LOGOUT] Initiating user logout...');
+      authAPI.logout();
+      console.log('✅ [LOGOUT] Auth state cleared');
+      setIsAuth(false);
+      console.log('✅ [LOGOUT] isAuth set to false');
+      navigate('/SingIn', { replace: true });
+      console.log('✅ [LOGOUT] Redirected to sign in');
+    } catch (error) {
+      console.error('❌ [LOGOUT] Logout error:', error);
+      // Still redirect even if logout fails
+      setIsAuth(false);
+      navigate('/SingIn', { replace: true });
+    }
+  };
+
   // Helper: Convert relative image paths to absolute URLs
   const getAbsoluteImageUrl = (imageUrl) => {
     if (!imageUrl) return null
@@ -147,8 +166,11 @@ const Profileh = () => {
           </ul>
 
           <div className="border-t border-white/10 mt-2 pt-2">
-            <button className="w-full text-left px-3 py-2 text-red-400 hover:bg-red-500/10 rounded-lg">
-              <Link to='/'>Sign out</Link>
+            <button 
+              onClick={handleLogout}
+              className="w-full text-left px-3 py-2 text-red-400 hover:bg-red-500/10 rounded-lg transition"
+            >
+              Sign out
             </button>
           </div>
 

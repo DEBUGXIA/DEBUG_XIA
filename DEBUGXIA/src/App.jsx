@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Route, Routes, Navigate, useLocation } from 'react-router-dom'
+import { Route, Routes, Navigate, useLocation, useNavigate } from 'react-router-dom'
 
 import Navbar from './components/Navbar'
 import Navbar2 from './components/Navbar2'
@@ -24,7 +24,7 @@ import Analysis_History from './pages2.o/Analysis_History'
 import Optimizer from './pages2.o/Optimizer'
 import Dashboard2 from './pages2.o/Dashboard2'
 import Footer2 from './components/Footer2'
-import { authAPI } from './services/api'
+import { authAPI, setAutoLogoutCallback, startHealthCheck, stopHealthCheck } from './services/api'
 
 
 // Protected Route (only for Home2 now)
@@ -44,6 +44,7 @@ const App = () => {
   const [isAuth, setIsAuth] = useState(false);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
+  const navigate = useNavigate();
 
   // Check if user is already authenticated on app load
   useEffect(() => {
@@ -53,6 +54,35 @@ const App = () => {
     }
     setLoading(false);
   }, []);
+
+  // Setup auto-logout callback when component mounts
+  useEffect(() => {
+    const handleAutoLogout = () => {
+      console.log('🔴 [APP] Auto-logout triggered - redirecting to sign in...');
+      setIsAuth(false);
+      authAPI.logout();
+      navigate('/SingIn', { replace: true });
+    };
+    
+    setAutoLogoutCallback(handleAutoLogout);
+    
+    return () => {
+      setAutoLogoutCallback(null);
+    };
+  }, [navigate]);
+
+  // Start health checks when user is authenticated
+  useEffect(() => {
+    if (isAuth) {
+      console.log('🟢 [APP] User authenticated - starting health checks');
+      startHealthCheck(30000); // Check every 30 seconds
+      
+      return () => {
+        console.log('🟡 [APP] User logged out - stopping health checks');
+        stopHealthCheck();
+      };
+    }
+  }, [isAuth]);
 
   // Navbar2 only for Home2 (after login)
   const afterLoginRoutes = [

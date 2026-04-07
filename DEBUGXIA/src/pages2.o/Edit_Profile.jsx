@@ -327,46 +327,7 @@ const Edit_Profile = () => {
               className='px-4 py-2 border border-gray-300 rounded-md text-sm text-gray-300 hover:bg-gray-900/50 transition'>
               🗑️ Remove
             </button>
-            {imageFile && (
-              <button 
-                onClick={() => {
-                  console.log('🧪 QUICK TEST: Uploading directly...')
-                  console.log('   - File:', imageFile.name, imageFile.size, 'bytes')
-                  const testFormData = new FormData()
-                  testFormData.append('profile_image', imageFile)
-                  testFormData.append('bio', formData.bio)
-                  
-                  for (let [key, value] of testFormData) {
-                    console.log(`   - FormData.${key}:`, value instanceof File ? `File(${value.name})` : value)
-                  }
-                  
-                  const token = localStorage.getItem('access_token')
-                  console.log('   - Token exists:', !!token)
-                  
-                  fetch('http://localhost:8000/api/profiles/me/', {
-                    method: 'PUT',
-                    headers: { 'Authorization': `Bearer ${token}` },
-                    body: testFormData
-                  })
-                  .then(r => {
-                    console.log('   📡 Response status:', r.status)
-                    return r.json()
-                  })
-                  .then(data => {
-                    console.log('   ✅ Upload successful!')
-                    console.log('   - Response data keys:', Object.keys(data))
-                    if (data.user?.profile_image) {
-                      console.log('   - New profile_image URL:', data.user.profile_image)
-                      setImage(data.user.profile_image)
-                    }
-                  })
-                  .catch(err => console.error('   ❌ Upload failed:', err))
-                }} 
-                className='px-3 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700'
-              >
-                🧪 Test Upload
-              </button>
-            )}
+
           </div>
         </div>
       </div>
